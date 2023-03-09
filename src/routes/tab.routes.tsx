@@ -10,16 +10,16 @@ export function TabRoutes() {
     <Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#181A20",
+          backgroundColor: "#075E55",
           height: 85,
         },
         tabBarStyle: {
-          backgroundColor: "#181A20",
+          backgroundColor: "#075E55",
           height: 70,
           borderTopWidth: 1,
           borderTopColor: "#019972",
         },
-        headerTintColor: "#181A20",
+        headerTintColor: "#075E55",
         headerShown: false,
         tabBarActiveTintColor: "#fff",
         tabBarInactiveTintColor: "#ccc",

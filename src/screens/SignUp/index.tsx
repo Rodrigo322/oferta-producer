@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import {
   AddressBook,
   Envelope,
@@ -24,6 +25,8 @@ export function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(true);
+
+  const { navigate } = useNavigation();
 
   return (
     <ScrollView style={styles.containerScroll}>
@@ -77,7 +80,10 @@ export function SignUp() {
             <Text style={styles.buttonSignInText}>Criar Conta</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.signMessage}>
+        <TouchableOpacity
+          onPress={() => navigate("SignIn")}
+          style={styles.signMessage}
+        >
           <Text style={styles.signMessageText}>Já possui uma conta?</Text>
           <Text style={styles.signMessageTextBold}>Entre aqui</Text>
         </TouchableOpacity>

@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     color: "#FFF",
   },
   containerScroll: {
-    backgroundColor: "#181A20",
+    backgroundColor: "#075E55",
     flex: 1,
   },
   container: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     elevation: 2,
     flexDirection: "row",
     paddingHorizontal: 10,
-    backgroundColor: "#1F222A",
+    backgroundColor: "#005047",
     marginBottom: 15,
     borderRadius: 7,
     alignItems: "center",

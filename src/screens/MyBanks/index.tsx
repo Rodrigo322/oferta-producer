@@ -18,7 +18,7 @@ export function MyBanks() {
       style={{
         width: "100%",
         height: "100%",
-        backgroundColor: "#1F222A",
+        backgroundColor: "#E5E5E5",
       }}
     >
       <HeaderReturn title="Minhas Bancas" />
@@ -50,9 +50,11 @@ export const styles = StyleSheet.create({
     height: 200,
     alignItems: "center",
     justifyContent: "space-around",
-    backgroundColor: "#181A20",
+    backgroundColor: "#ccc",
     width: width / 2 - 20,
     elevation: 5,
+    borderWidth: 1,
+    borderColor: "#075E55",
   },
   cardBankingImg: {
     width: 100,
@@ -62,6 +64,6 @@ export const styles = StyleSheet.create({
   cardBankingTitle: {
     fontWeight: "600",
     fontSize: 14,
-    color: "#FFF",
+    color: "#075E55",
   },
 });

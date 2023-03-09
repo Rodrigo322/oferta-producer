@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#181A20",
+    backgroundColor: "#075E55",
     height: 115,
     borderTopWidth: 0,
     alignItems: "center",
