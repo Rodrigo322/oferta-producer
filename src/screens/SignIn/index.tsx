@@ -80,7 +80,7 @@ export function SignIn() {
             onPress={handleSignIn}
             style={styles.buttonSignIn}
           >
-            {loading && <ActivityIndicator size="large" color="#019972" />}
+            {loading && <ActivityIndicator size="large" color="#fff" />}
             {!loading && <Text style={styles.buttonSignInText}>Entrar</Text>}
           </TouchableOpacity>
         </View>

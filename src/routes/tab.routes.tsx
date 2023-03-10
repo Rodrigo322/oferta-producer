@@ -1,11 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Bank, House } from "phosphor-react-native";
+import { Bank, House, UserGear } from "phosphor-react-native";
+import { useTabContext } from "../contexts/TabContext";
 import { Home } from "../screens/Home";
 import { MyBanks } from "../screens/MyBanks";
+import { Settings } from "../screens/settings";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
 export function TabRoutes() {
+  const { showTab } = useTabContext();
   return (
     <Navigator
       screenOptions={{
@@ -42,6 +45,16 @@ export function TabRoutes() {
         options={{
           tabBarIcon: ({ color }) => (
             <Bank color={color} size={30} weight="fill" />
+          ),
+        }}
+      />
+
+      <Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <UserGear color={color} size={30} weight="fill" />
           ),
         }}
       />

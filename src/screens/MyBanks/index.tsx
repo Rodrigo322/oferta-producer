@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   StyleSheet,
@@ -10,9 +11,38 @@ import {
 import { HeaderReturn } from "../../components/HeaderReturn";
 const { width } = Dimensions.get("window");
 
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import LogoImg from "../../assets/ofairta.png";
+import { useTabContext } from "../../contexts/TabContext";
+import { api } from "../../services/api";
+
+interface BankingResponse {
+  id: string;
+  name: string;
+}
 
 export function MyBanks() {
+  const [loading, setLoading] = useState(false);
+  const [banking, setBanking] = useState<BankingResponse[]>([]);
+  const { setShowTab, setIdBank } = useTabContext();
+
+  const { navigate } = useNavigation();
+
+  useEffect(() => {
+    setLoading(true);
+    api.get<BankingResponse[]>("/stores").then((response) => {
+      setBanking(response.data);
+      setLoading(false);
+    });
+  }, []);
+
+  async function handlerSelectedBank(id: string) {
+    setIdBank(id);
+    navigate("Home");
+    setShowTab(true);
+  }
+
   return (
     <View
       style={{
@@ -23,10 +53,17 @@ export function MyBanks() {
     >
       <HeaderReturn title="Minhas Bancas" />
       <View style={styles.listHomeProduct}>
-        <TouchableOpacity style={styles.cardBanking}>
-          <Image style={styles.cardBankingImg} source={LogoImg} />
-          <Text style={styles.cardBankingTitle}>Teste</Text>
-        </TouchableOpacity>
+        {loading && <ActivityIndicator size="large" color="#019972" />}
+        {banking.map((bank) => (
+          <TouchableOpacity
+            onPress={() => handlerSelectedBank(bank.id)}
+            key={bank.id}
+            style={styles.cardBanking}
+          >
+            <Image style={styles.cardBankingImg} source={LogoImg} />
+            <Text style={styles.cardBankingTitle}>{bank.name}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );

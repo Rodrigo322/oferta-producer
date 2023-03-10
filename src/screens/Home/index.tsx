@@ -13,19 +13,7 @@ export function Home() {
         backgroundColor: "#E5E5E5",
       }}
     >
-      <HeaderReturn title="Home" />
-
-      <Text
-        style={{
-          color: "#075E55",
-          paddingTop: 20,
-          paddingHorizontal: 20,
-          fontWeight: "700",
-          fontSize: 18,
-        }}
-      >
-        Olá Rodrigo Lucas
-      </Text>
+      <HeaderReturn title={`Olá Rodrigo Lucas`} />
 
       <View
         style={{
