@@ -11,6 +11,7 @@ interface Token {
 
 interface AuthContextType {
   token: Token | null;
+  userName: string;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -18,6 +19,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({
   token: null,
+  userName: undefined,
   loading: false,
   login: async () => {},
   logout: () => {},
@@ -40,6 +42,7 @@ function isTokenValid(token: string | null): boolean {
 
 export function AuthProvider({ children }: any) {
   const [token, setToken] = useState<Token | null>(null);
+  const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -58,7 +61,7 @@ export function AuthProvider({ children }: any) {
         await logout();
       }
     };
-
+    getUserName();
     loadStoredData();
   }, [token]);
 
@@ -86,6 +89,7 @@ export function AuthProvider({ children }: any) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       await AsyncStorage.setItem("@storage:token", token);
+      getUserName();
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -97,6 +101,12 @@ export function AuthProvider({ children }: any) {
     }
   }
 
+  function getUserName() {
+    api.get("/unique-user").then((user) => {
+      setUserName(user.data.name);
+    });
+  }
+
   async function logout() {
     setLoading(true);
     setToken(null);
@@ -104,6 +114,7 @@ export function AuthProvider({ children }: any) {
     await AsyncStorage.removeItem("@storage:token");
     await AsyncStorage.clear();
     setLoading(false);
+    setUserName("");
   }
 
   const authContextValue: AuthContextType = {
@@ -111,6 +122,7 @@ export function AuthProvider({ children }: any) {
     loading,
     login,
     logout,
+    userName,
   };
 
   return (

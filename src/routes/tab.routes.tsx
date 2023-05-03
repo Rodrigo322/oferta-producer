@@ -4,6 +4,7 @@ import { useTabContext } from "../contexts/TabContext";
 import { Home } from "../screens/Home";
 import { MyBanks } from "../screens/MyBanks";
 import { Settings } from "../screens/settings";
+import { CreateProduct } from "../screens/CreateProduct";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -29,25 +30,39 @@ export function TabRoutes() {
         tabBarShowLabel: false,
       }}
     >
-      <Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <House color={color} size={30} weight="fill" />
-          ),
-        }}
-      />
+      {showTab && (
+        <>
+          <Screen
+            name="Home"
+            component={Home}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <House color={color} size={30} weight="fill" />
+              ),
+            }}
+          />
 
-      <Screen
-        name="MyBanks"
-        component={MyBanks}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <Bank color={color} size={30} weight="fill" />
-          ),
-        }}
-      />
+          <Screen
+            name="CreateProduct"
+            component={CreateProduct}
+            options={{
+              tabBarButton: () => null,
+            }}
+          />
+        </>
+      )}
+
+      {!showTab && (
+        <Screen
+          name="MyBanks"
+          component={MyBanks}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <Bank color={color} size={30} weight="fill" />
+            ),
+          }}
+        />
+      )}
 
       <Screen
         name="Settings"

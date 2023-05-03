@@ -58,4 +58,13 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
+  button: {
+    width: "40%",
+    height: 45,
+    backgroundColor: "#d46b71",
+    borderRadius: 16,
+    elevation: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });

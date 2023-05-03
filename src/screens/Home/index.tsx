@@ -1,10 +1,40 @@
 import { PencilLine, XCircle } from "phosphor-react-native";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { HeaderReturn } from "../../components/HeaderReturn";
 
-import logoImg from "../../assets/ofairta.png";
+import { useAuth } from "../../contexts/AuthContext";
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
+import { useTabContext } from "../../contexts/TabContext";
+
+interface ProductsResponse {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+}
 
 export function Home() {
+  const { userName } = useAuth();
+  const [products, setProducts] = useState<ProductsResponse[]>([]);
+  const { idBank } = useTabContext();
+
+  useEffect(() => {
+    api
+      .get<ProductsResponse[]>(`/get-all-product/store/${idBank}`)
+      .then((response) => {
+        setProducts(response.data);
+      });
+  }, [idBank]);
+
   return (
     <View
       style={{
@@ -13,31 +43,21 @@ export function Home() {
         backgroundColor: "#E5E5E5",
       }}
     >
-      <HeaderReturn title={`Olá Rodrigo Lucas`} />
-
-      <View
-        style={{
-          paddingTop: 40,
-          paddingHorizontal: 20,
-        }}
-      >
+      <HeaderReturn title={`Olá, ${userName}`} />
+      <ScrollView>
         <View
           style={{
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexDirection: "row",
+            paddingTop: 40,
+            paddingHorizontal: 20,
           }}
         >
-          <Text
+          <View
             style={{
-              color: "#075E55",
-              fontWeight: "500",
-              fontSize: 16,
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexDirection: "row",
             }}
           >
-            Meus produtos
-          </Text>
-          <TouchableOpacity>
             <Text
               style={{
                 color: "#075E55",
@@ -45,31 +65,49 @@ export function Home() {
                 fontSize: 16,
               }}
             >
-              Add mais produtos
+              Meus produtos
             </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ alignItems: "center", paddingTop: 20 }}>
-          <View style={styles.cartProduct}>
-            <Image source={logoImg} style={styles.cartProductImage} />
-            <View style={styles.cartProductTextInfo}>
-              <Text style={styles.cartProductText}>batata</Text>
-              <Text style={styles.cartProductText}>R$</Text>
-            </View>
-
-            <View style={styles.cartProductButtons}>
-              <Text style={styles.cartProductButtonsText}>QTD</Text>
-            </View>
             <TouchableOpacity>
-              <PencilLine color="#075E55" size={25} weight="fill" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <XCircle color="#d46b71" size={25} weight="fill" />
+              <Text
+                style={{
+                  color: "#075E55",
+                  fontWeight: "500",
+                  fontSize: 16,
+                }}
+              >
+                Add mais produtos
+              </Text>
             </TouchableOpacity>
           </View>
+
+          <View style={{ alignItems: "center", paddingTop: 20 }}>
+            {products?.map((product) => (
+              <View key={product.id} style={styles.cartProduct}>
+                <Image
+                  source={{ uri: product.image }}
+                  style={styles.cartProductImage}
+                />
+                <View style={styles.cartProductTextInfo}>
+                  <Text style={styles.cartProductText}>{product.name}</Text>
+                  <Text style={styles.cartProductText}>R$ {product.price}</Text>
+                </View>
+
+                <View style={styles.cartProductButtons}>
+                  <Text style={styles.cartProductButtonsText}>
+                    QTD: {product.quantity}
+                  </Text>
+                </View>
+                <TouchableOpacity>
+                  <PencilLine color="#075E55" size={25} weight="fill" />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <XCircle color="#d46b71" size={25} weight="fill" />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
