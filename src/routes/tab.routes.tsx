@@ -1,10 +1,21 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Bank, House, UserGear } from "phosphor-react-native";
+import {
+  BagSimple,
+  Bank,
+  House,
+  Storefront,
+  UserGear,
+} from "phosphor-react-native";
 import { useTabContext } from "../contexts/TabContext";
 import { Home } from "../screens/Home";
 import { MyBanks } from "../screens/MyBanks";
 import { Settings } from "../screens/settings";
 import { CreateProduct } from "../screens/CreateProduct";
+import { Orders } from "../screens/Orders";
+import { DetailsOrders } from "../screens/DetailsOrders";
+import { AddressProfile } from "../screens/AddressProfile";
+import { Profile } from "../screens/Profile";
+import { ResetPassword } from "../screens/ResetPassword";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -39,6 +50,48 @@ export function TabRoutes() {
               tabBarIcon: ({ color }) => (
                 <House color={color} size={30} weight="fill" />
               ),
+            }}
+          />
+
+          <Screen
+            name="Orders"
+            component={Orders}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <Storefront color={color} size={30} weight="fill" />
+              ),
+            }}
+          />
+
+          <Screen
+            name="DetailsOrders"
+            component={DetailsOrders}
+            options={{
+              tabBarButton: () => null,
+            }}
+          />
+
+          <Screen
+            name="AddressProfile"
+            component={AddressProfile}
+            options={{
+              tabBarButton: () => null,
+            }}
+          />
+
+          <Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              tabBarButton: () => null,
+            }}
+          />
+
+          <Screen
+            name="ResetPassword"
+            component={ResetPassword}
+            options={{
+              tabBarButton: () => null,
             }}
           />
 

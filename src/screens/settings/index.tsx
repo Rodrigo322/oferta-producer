@@ -51,6 +51,7 @@ export function Settings() {
                 styles.settingContainerOptionsGroup,
                 styles.settingContainerOptionsGroupFirst,
               ]}
+              onPress={() => navigate("AddressProfile")}
             >
               <View style={styles.settingContainerOptionsIcon}>
                 <MapPin color="#019972" size={32} weight="thin" />
@@ -60,14 +61,20 @@ export function Settings() {
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
             </Pressable>
-            <Pressable style={styles.settingContainerOptionsGroup}>
+            <Pressable
+              style={styles.settingContainerOptionsGroup}
+              onPress={() => navigate("Profile")}
+            >
               <View style={styles.settingContainerOptionsIcon}>
                 <IdentificationBadge color="#019972" size={32} weight="thin" />
                 <Text style={styles.settingOptionsText}>Dados pessoais</Text>
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
             </Pressable>
-            <Pressable style={styles.settingContainerOptionsGroup}>
+            <Pressable
+              style={styles.settingContainerOptionsGroup}
+              onPress={() => navigate("ResetPassword")}
+            >
               <View style={styles.settingContainerOptionsIcon}>
                 <LockKey color="#019972" size={32} weight="thin" />
                 <Text style={styles.settingOptionsText}>Alterar senha</Text>

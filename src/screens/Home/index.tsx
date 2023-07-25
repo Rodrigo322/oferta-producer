@@ -13,6 +13,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useTabContext } from "../../contexts/TabContext";
+import { useNavigation } from "@react-navigation/native";
 
 interface ProductsResponse {
   id: string;
@@ -26,6 +27,8 @@ export function Home() {
   const { userName } = useAuth();
   const [products, setProducts] = useState<ProductsResponse[]>([]);
   const { idBank } = useTabContext();
+
+  const { navigate } = useNavigation();
 
   useEffect(() => {
     api
@@ -67,7 +70,7 @@ export function Home() {
             >
               Meus produtos
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate("CreateProduct")}>
               <Text
                 style={{
                   color: "#075E55",
