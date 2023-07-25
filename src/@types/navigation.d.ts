@@ -11,6 +11,7 @@ export declare global {
       AddressProfile: undefined;
       Profile: undefined;
       ResetPassword: undefined;
+      DeactivateAccount: undefined;
     }
   }
 }

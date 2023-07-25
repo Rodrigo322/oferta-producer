@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 15,
-    backgroundColor: "#ccc",
+    backgroundColor: "#fff",
     width: "95%",
   },
   settingContainerOptionsIcon: {

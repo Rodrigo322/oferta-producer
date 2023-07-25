@@ -36,8 +36,6 @@ export function Orders() {
     });
   }, []);
 
-  console.log(request);
-
   return (
     <View>
       <HeaderReturn title="Meus Pedidos" />

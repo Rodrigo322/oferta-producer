@@ -43,7 +43,7 @@ export function Home() {
       style={{
         width: "100%",
         height: "100%",
-        backgroundColor: "#E5E5E5",
+        // backgroundColor: "#E5E5E5",
       }}
     >
       <HeaderReturn title={`Olá, ${userName}`} />
@@ -125,7 +125,7 @@ export const styles = StyleSheet.create({
     borderColor: "#019972",
     borderRadius: 16,
     marginBottom: 10,
-    backgroundColor: "#ccc",
+    backgroundColor: "#fff",
     width: "95%",
     elevation: 5,
   },

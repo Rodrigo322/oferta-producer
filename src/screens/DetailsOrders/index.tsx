@@ -1,7 +1,8 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -28,6 +29,7 @@ interface DetailsSalesResponse {
     };
     quantity: number;
   }>;
+  status: string;
 }
 
 export function DetailsOrders() {
@@ -38,6 +40,8 @@ export function DetailsOrders() {
   const route = useRoute();
   const { id } = route.params as RouteParams;
 
+  const { goBack } = useNavigation();
+
   useEffect(() => {
     setLoading(true);
     api.get(`get-details-sale-by-user/${id}`).then((response) => {
@@ -46,6 +50,20 @@ export function DetailsOrders() {
       setLoading(false);
     });
   }, [id]);
+
+  async function updateDetailsOrder() {
+    setLoading(true);
+    api
+      .put(`/update-closed-sale-by-owner/${id}`, {
+        status: "CLOSED",
+      })
+      .then((response) => {
+        Alert.alert("Pedido aprovado!");
+        console.log(response.data);
+        setLoading(false);
+        goBack();
+      });
+  }
 
   return (
     <View>
@@ -115,8 +133,16 @@ export function DetailsOrders() {
                       </View>
                     </View>
                   ))}
-                  <TouchableOpacity style={styles.button}>
-                    <Text style={styles.labelButton}>APROVAR PEDIDO</Text>
+                  <TouchableOpacity
+                    disabled={detailsSale.status === "OPEN" ? false : true}
+                    style={styles.button}
+                    onPress={updateDetailsOrder}
+                  >
+                    <Text style={styles.labelButton}>
+                      {detailsSale.status === "OPEN"
+                        ? "Aprovar Pedido"
+                        : "Pedido Aprovado"}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </ScrollView>
@@ -194,7 +220,7 @@ export const styles = StyleSheet.create({
   button: {
     width: "90%",
     height: 60,
-    backgroundColor: "#019972",
+    backgroundColor: "#075E55",
     borderRadius: 7,
     justifyContent: "center",
     alignItems: "center",

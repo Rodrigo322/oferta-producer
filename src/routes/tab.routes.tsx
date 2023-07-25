@@ -16,6 +16,7 @@ import { DetailsOrders } from "../screens/DetailsOrders";
 import { AddressProfile } from "../screens/AddressProfile";
 import { Profile } from "../screens/Profile";
 import { ResetPassword } from "../screens/ResetPassword";
+import { DeactivateAccount } from "../screens/DeactivateAccount";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -90,6 +91,14 @@ export function TabRoutes() {
           <Screen
             name="ResetPassword"
             component={ResetPassword}
+            options={{
+              tabBarButton: () => null,
+            }}
+          />
+
+          <Screen
+            name="DeactivateAccount"
+            component={DeactivateAccount}
             options={{
               tabBarButton: () => null,
             }}

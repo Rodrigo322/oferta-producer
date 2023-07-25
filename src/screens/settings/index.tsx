@@ -81,7 +81,10 @@ export function Settings() {
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
             </Pressable>
-            <Pressable style={styles.settingContainerOptionsGroup}>
+            <Pressable
+              style={styles.settingContainerOptionsGroup}
+              onPress={() => navigate("DeactivateAccount")}
+            >
               <View style={styles.settingContainerOptionsIcon}>
                 <XSquare color="#019972" size={32} weight="thin" />
                 <Text style={styles.settingOptionsText}>Desativar conta</Text>
