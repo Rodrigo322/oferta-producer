@@ -7,6 +7,7 @@ import {
   Text,
   View,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { HeaderReturn } from "../../components/HeaderReturn";
 import React, { useEffect, useState } from "react";
@@ -28,16 +29,18 @@ export function Orders() {
   const [loading, setLoading] = useState(false);
   const { navigate } = useNavigation();
 
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     api.get("/get-all-sale-by-owner").then((response) => {
       setRequest(response.data);
       setLoading(false);
     });
-  }, []);
+  }, [refresh]);
 
   return (
-    <View>
+    <View style={{ backgroundColor: "#DFEDE9", flex: 1 }}>
       <HeaderReturn title="Meus Pedidos" />
       {loading && (
         <ActivityIndicator style={styles.loading} size={50} color="#019972" />
@@ -56,7 +59,7 @@ export function Orders() {
                         backgroundColor: "#FFF1DC",
                         borderColor: "#d46b71",
                       }
-                    : { backgroundColor: "#DFEDE9" },
+                    : { backgroundColor: "#fff" },
                 ]}
               >
                 <Image source={LogoImg} style={styles.RequestImage} />
@@ -77,6 +80,12 @@ export function Orders() {
             ))}
           </ScrollView>
         )}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setRefresh(!refresh)}
+        >
+          <Text style={styles.labelButton}>Atualizar</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -85,9 +94,11 @@ export function Orders() {
 export const styles = StyleSheet.create({
   container: {
     padding: 20,
+    // alignItems: "center",
   },
   myRequestContainer: {
     padding: 40,
+    width: "100%",
   },
   loading: {
     alignContent: "center",
@@ -95,7 +106,7 @@ export const styles = StyleSheet.create({
   },
   RequestCard: {
     padding: 10,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     margin: 10,
     elevation: 5,
     borderRadius: 10,
@@ -121,5 +132,22 @@ export const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 14,
     color: "#343F4B",
+  },
+  labelButton: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  button: {
+
+
+
+
+    height: 60,
+    backgroundColor: "#075E55",
+    borderRadius: 7,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
   },
 });

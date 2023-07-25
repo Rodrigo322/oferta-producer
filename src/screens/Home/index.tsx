@@ -47,7 +47,7 @@ export function Home() {
       style={{
         width: "100%",
         height: "100%",
-        // backgroundColor: "#E5E5E5",
+        backgroundColor: "#DFEDE9",
       }}
     >
       <HeaderReturn title={`Olá, ${userName}`} />

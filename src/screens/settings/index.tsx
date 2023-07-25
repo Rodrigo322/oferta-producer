@@ -15,7 +15,7 @@ import {
   XSquare,
 } from "phosphor-react-native";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { TouchableOpacity, ScrollView, View, Text } from "react-native";
 
 import { HeaderReturn } from "../../components/HeaderReturn";
 import { ModalApp } from "../../components/Modal";
@@ -46,7 +46,7 @@ export function Settings() {
         <View style={styles.settingsContainerOptions}>
           <Text style={styles.settingOptionTitle}>Minha Conta</Text>
           <View style={{ alignItems: "center", gap: 10 }}>
-            <Pressable
+            <TouchableOpacity
               style={[
                 styles.settingContainerOptionsGroup,
                 styles.settingContainerOptionsGroupFirst,
@@ -55,13 +55,11 @@ export function Settings() {
             >
               <View style={styles.settingContainerOptionsIcon}>
                 <MapPin color="#019972" size={32} weight="thin" />
-                <Text style={styles.settingOptionsText}>
-                  Endereço de entrega
-                </Text>
+                <Text style={styles.settingOptionsText}>Meus Endereços</Text>
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
               style={styles.settingContainerOptionsGroup}
               onPress={() => navigate("Profile")}
             >
@@ -70,8 +68,8 @@ export function Settings() {
                 <Text style={styles.settingOptionsText}>Dados pessoais</Text>
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
               style={styles.settingContainerOptionsGroup}
               onPress={() => navigate("ResetPassword")}
             >
@@ -80,8 +78,8 @@ export function Settings() {
                 <Text style={styles.settingOptionsText}>Alterar senha</Text>
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
-            </Pressable>
-            <Pressable
+            </TouchableOpacity>
+            <TouchableOpacity
               style={styles.settingContainerOptionsGroup}
               onPress={() => navigate("DeactivateAccount")}
             >
@@ -90,7 +88,7 @@ export function Settings() {
                 <Text style={styles.settingOptionsText}>Desativar conta</Text>
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
         <Text
@@ -99,7 +97,7 @@ export function Settings() {
           Geral
         </Text>
         <View style={{ alignItems: "center", gap: 10, paddingBottom: 200 }}>
-          <Pressable
+          <TouchableOpacity
             onPress={() => setIsModalVisible(true)}
             style={[
               styles.settingContainerOptionsGroup,
@@ -111,9 +109,9 @@ export function Settings() {
               <Text style={styles.settingOptionsText}>Sobre o OFairTa</Text>
             </View>
             <CaretRight color="#019972" size={32} weight="thin" />
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
             onPress={() => setIsModalHelpVisible(!isModalHelpVisible)}
             style={styles.settingContainerOptionsGroup}
           >
@@ -122,9 +120,9 @@ export function Settings() {
               <Text style={styles.settingOptionsText}>Preciso de ajuda?</Text>
             </View>
             <CaretRight color="#019972" size={32} weight="thin" />
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
             onPress={() => setIsModalSignOutVisible(!isModalSignOutVisible)}
             style={styles.settingContainerOptionsGroup}
           >
@@ -140,7 +138,7 @@ export function Settings() {
               </Text>
             </View>
             <SignOut color="#d46b71" size={32} weight="thin" />
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -190,7 +188,7 @@ export function Settings() {
             padding: 20,
           }}
         >
-          <Pressable
+          <TouchableOpacity
             style={{
               width: "100%",
               height: 80,
@@ -213,9 +211,9 @@ export function Settings() {
             >
               Whatsapp
             </Text>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
             style={{
               width: "100%",
               height: 80,
@@ -238,9 +236,9 @@ export function Settings() {
             >
               E-mail
             </Text>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
             style={{
               width: "100%",
               height: 80,
@@ -263,9 +261,9 @@ export function Settings() {
             >
               Telefone
             </Text>
-          </Pressable>
+          </TouchableOpacity>
 
-          <Pressable
+          <TouchableOpacity
             style={{
               width: "100%",
               height: 80,
@@ -288,7 +286,7 @@ export function Settings() {
             >
               Envie uma sugestão
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </ModalApp>
 
@@ -306,10 +304,10 @@ export function Settings() {
             gap: 25,
           }}
         >
-          <Pressable onPress={handleSignOut} style={styles.button}>
+          <TouchableOpacity onPress={handleSignOut} style={styles.button}>
             <Text style={{ color: "#FFF" }}>Sim</Text>
-          </Pressable>
-          <Pressable
+          </TouchableOpacity>
+          <TouchableOpacity
             onPress={() => setIsModalSignOutVisible(!isModalSignOutVisible)}
             style={{
               width: "40%",
@@ -322,7 +320,7 @@ export function Settings() {
             }}
           >
             <Text style={{ color: "#FFF" }}>Não</Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </ModalApp>
     </View>
