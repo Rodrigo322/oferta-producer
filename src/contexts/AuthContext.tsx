@@ -57,11 +57,13 @@ export function AuthProvider({ children }: any) {
       if (isTokenValid(storageToken)) {
         setToken({ token: storageToken });
         api.defaults.headers.common["Authorization"] = `Bearer ${storageToken}`;
+        api.get("/unique-user").then((user) => {
+          setUserName(user.data.name);
+        });
       } else {
         await logout();
       }
     };
-    getUserName();
     loadStoredData();
   }, [token]);
 
@@ -89,7 +91,9 @@ export function AuthProvider({ children }: any) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       await AsyncStorage.setItem("@storage:token", token);
-      getUserName();
+      api.get("/unique-user").then((user) => {
+        setUserName(user.data.name);
+      });
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -99,12 +103,6 @@ export function AuthProvider({ children }: any) {
       );
       setLoading(false);
     }
-  }
-
-  function getUserName() {
-    api.get("/unique-user").then((user) => {
-      setUserName(user.data.name);
-    });
   }
 
   async function logout() {
