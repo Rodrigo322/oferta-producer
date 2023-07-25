@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { api } from "../services/api";
 import { checkInternetConnection } from "../utils/netInfo";
+import { useTabContext } from "./TabContext";
 
 interface Token {
   token?: string | null;
@@ -44,6 +45,7 @@ export function AuthProvider({ children }: any) {
   const [token, setToken] = useState<Token | null>(null);
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
+  const { setIdBank } = useTabContext();
 
   useEffect(() => {
     const loadStoredData = async () => {
@@ -113,6 +115,7 @@ export function AuthProvider({ children }: any) {
     await AsyncStorage.clear();
     setLoading(false);
     setUserName("");
+    setIdBank("");
   }
 
   const authContextValue: AuthContextType = {

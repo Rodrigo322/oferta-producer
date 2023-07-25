@@ -1,5 +1,6 @@
 import { PencilLine, XCircle } from "phosphor-react-native";
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
@@ -25,16 +26,19 @@ interface ProductsResponse {
 
 export function Home() {
   const { userName } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<ProductsResponse[]>([]);
   const { idBank } = useTabContext();
 
   const { navigate } = useNavigation();
 
   useEffect(() => {
+    setLoading(true);
     api
       .get<ProductsResponse[]>(`/get-all-product/store/${idBank}`)
       .then((response) => {
         setProducts(response.data);
+        setLoading(false);
       });
   }, [idBank]);
 
@@ -83,32 +87,44 @@ export function Home() {
             </TouchableOpacity>
           </View>
 
-          <View style={{ alignItems: "center", paddingTop: 20 }}>
-            {products?.map((product) => (
-              <View key={product.id} style={styles.cartProduct}>
-                <Image
-                  source={{ uri: product.image }}
-                  style={styles.cartProductImage}
-                />
-                <View style={styles.cartProductTextInfo}>
-                  <Text style={styles.cartProductText}>{product.name}</Text>
-                  <Text style={styles.cartProductText}>R$ {product.price}</Text>
-                </View>
+          {loading && (
+            <ActivityIndicator
+              style={{ paddingTop: 50 }}
+              size={50}
+              color="#019972"
+            />
+          )}
 
-                <View style={styles.cartProductButtons}>
-                  <Text style={styles.cartProductButtonsText}>
-                    QTD: {product.quantity}
-                  </Text>
+          {!loading && (
+            <View style={{ alignItems: "center", paddingTop: 20 }}>
+              {products?.map((product) => (
+                <View key={product.id} style={styles.cartProduct}>
+                  <Image
+                    source={{ uri: product.image }}
+                    style={styles.cartProductImage}
+                  />
+                  <View style={styles.cartProductTextInfo}>
+                    <Text style={styles.cartProductText}>{product.name}</Text>
+                    <Text style={styles.cartProductText}>
+                      R$ {product.price}
+                    </Text>
+                  </View>
+
+                  <View style={styles.cartProductButtons}>
+                    <Text style={styles.cartProductButtonsText}>
+                      QTD: {product.quantity}
+                    </Text>
+                  </View>
+                  <TouchableOpacity>
+                    <PencilLine color="#075E55" size={25} weight="fill" />
+                  </TouchableOpacity>
+                  <TouchableOpacity>
+                    <XCircle color="#d46b71" size={25} weight="fill" />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity>
-                  <PencilLine color="#075E55" size={25} weight="fill" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                  <XCircle color="#d46b71" size={25} weight="fill" />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
+              ))}
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
