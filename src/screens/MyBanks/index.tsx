@@ -52,19 +52,25 @@ export function MyBanks() {
       }}
     >
       <HeaderReturn title="Minhas Bancas" />
-      <View style={styles.listHomeProduct}>
-        {loading && <ActivityIndicator size="large" color="#019972" />}
-        {banking.map((bank) => (
-          <TouchableOpacity
-            onPress={() => handlerSelectedBank(bank.id)}
-            key={bank.id}
-            style={styles.cardBanking}
-          >
-            <Image style={styles.cardBankingImg} source={LogoImg} />
-            <Text style={styles.cardBankingTitle}>{bank.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <View style={{ marginTop: 20 }} />
+      {loading && <ActivityIndicator size="large" color="#019972" />}
+      {!loading && (
+        <View style={styles.listHomeProduct}>
+          {banking.map((bank) => (
+            <TouchableOpacity
+              onPress={() => handlerSelectedBank(bank.id)}
+              key={bank.id}
+              style={styles.cardBanking}
+            >
+              <Image style={styles.cardBankingImg} source={LogoImg} />
+              <Text style={styles.cardBankingTitle}>{bank.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Criar nova banca</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -102,5 +108,19 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 14,
     color: "#075E55",
+  },
+  button: {
+    width: "100%",
+    height: 60,
+    backgroundColor: "#019972",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+    bottom: 0,
+    position: "absolute",
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
   },
 });

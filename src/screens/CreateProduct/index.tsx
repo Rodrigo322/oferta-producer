@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Image,
   ScrollView,
@@ -12,9 +13,17 @@ import * as ImagePicker from "expo-image-picker";
 import { HeaderReturn } from "../../components/HeaderReturn";
 import { useState } from "react";
 import { Plus } from "phosphor-react-native";
+import { useTabContext } from "../../contexts/TabContext";
+import { api } from "../../services/api";
 
 export function CreateProduct() {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
+  const { idBank } = useTabContext();
+  const [loading, setLoading] = useState(false);
 
   async function handleSelectImages() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -39,6 +48,29 @@ export function CreateProduct() {
     setPhotos([...photos, photo]);
   }
 
+  async function handleCreateProduct() {
+    setLoading(true);
+    const formData = new FormData();
+
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("quantity", quantity);
+    photos.map((photo, index) => {
+      return formData.append("image", {
+        name: `image-${index}.jpeg`,
+        uri: photo,
+        type: "image/jpeg",
+      } as any);
+    });
+
+    console.log(JSON.stringify(formData, null, 2));
+
+    const response = await api.post(`/create-product/${idBank}`, formData);
+    console.log(JSON.stringify(response, null, 2));
+    setLoading(false);
+  }
+
   return (
     <View>
       <HeaderReturn title="Cadastro de produtos" />
@@ -46,22 +78,38 @@ export function CreateProduct() {
         <View style={styles.containerInput}>
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Nome</Text>
-            <TextInput style={styles.input} placeholder="Ex: Batata" />
+            <TextInput
+              onChangeText={setName}
+              style={styles.input}
+              placeholder="Ex: Batata"
+            />
           </View>
 
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Descrição</Text>
-            <TextInput style={styles.input} placeholder="Ex: Batata Inglesa" />
+            <TextInput
+              onChangeText={setDescription}
+              style={styles.input}
+              placeholder="Ex: Batata Inglesa"
+            />
           </View>
 
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Preço</Text>
-            <TextInput style={styles.input} placeholder="Ex: 8.99" />
+            <TextInput
+              onChangeText={setPrice}
+              style={styles.input}
+              placeholder="Ex: 8.99"
+            />
           </View>
 
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Quantidade</Text>
-            <TextInput style={styles.input} placeholder="Ex: 200" />
+            <TextInput
+              onChangeText={setQuantity}
+              style={styles.input}
+              placeholder="Ex: 200"
+            />
           </View>
           <Text style={styles.labelInput}>Imagens do produto</Text>
 
@@ -85,8 +133,13 @@ export function CreateProduct() {
             </View>
           </ScrollView>
 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.labelButton}>Cadastrar</Text>
+          <TouchableOpacity
+            disabled={loading}
+            onPress={handleCreateProduct}
+            style={styles.button}
+          >
+            {loading && <ActivityIndicator size="large" color="#019972" />}
+            {!loading && <Text style={styles.labelButton}>Cadastrar</Text>}
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -118,7 +171,8 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: 60,
     paddingLeft: 10,
-    color: "#fff",
+    color: "#075E55",
+    fontWeight: "700",
     borderWidth: 1,
     borderColor: "#075E55",
     borderRadius: 10,

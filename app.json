@@ -10,12 +10,17 @@
       "backgroundColor": "#075E55"
     },
     "icon": "./assets/icon.png",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#075E55"
       }
-    }
+    },
+    "plugins": [
+      "expo-image-picker"
+    ]
   }
 }

@@ -8,6 +8,8 @@ import {
 } from "phosphor-react-native";
 import { useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -20,13 +22,35 @@ import { TextInputMask } from "react-native-masked-text";
 
 import LogoImg from "../../assets/ofairta.png";
 import { styles } from "./styles";
+import { api } from "../../services/api";
 
 export function SignUp() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cpf, setCpf] = useState("");
   const [isPassword, setIsPassword] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const { navigate } = useNavigation();
+
+  async function handleCreateUser() {
+    setLoading(true);
+    const response = await api.post("/create-user", {
+      name,
+      email,
+      password,
+      cpf,
+      accessLevelName: "Vendedor",
+    });
+
+    if (response.status === 201) {
+      Alert.alert("Usuário cadastrado com sucesso!");
+      navigate("SignIn");
+      setLoading(false);
+    }
+    setLoading(false);
+  }
 
   return (
     <ScrollView style={styles.containerScroll}>
@@ -39,6 +63,7 @@ export function SignUp() {
               placeholderTextColor="#fff"
               style={styles.input}
               placeholder="Digite seu nome"
+              onChangeText={setName}
             />
           </View>
           <View style={styles.inputGroup}>
@@ -47,6 +72,7 @@ export function SignUp() {
               placeholderTextColor="#fff"
               style={styles.input}
               placeholder="Digite seu e-mail"
+              onChangeText={setEmail}
             />
           </View>
 
@@ -57,6 +83,7 @@ export function SignUp() {
               placeholderTextColor="#fff"
               style={styles.input}
               placeholder="Digite seu CPF"
+              onChangeText={setCpf}
             />
           </View>
 
@@ -67,6 +94,7 @@ export function SignUp() {
               placeholderTextColor="#fff"
               style={styles.input}
               placeholder="Digite sua password"
+              onChangeText={setPassword}
             />
             <Pressable onPress={() => setIsPassword(!isPassword)}>
               {isPassword && (
@@ -76,8 +104,15 @@ export function SignUp() {
             </Pressable>
           </View>
 
-          <TouchableOpacity style={styles.buttonSignIn}>
-            <Text style={styles.buttonSignInText}>Criar Conta</Text>
+          <TouchableOpacity
+            disabled={loading}
+            style={styles.buttonSignIn}
+            onPress={handleCreateUser}
+          >
+            {loading && <ActivityIndicator size="large" color="#fff" />}
+            {!loading && (
+              <Text style={styles.buttonSignInText}>Criar Conta</Text>
+            )}
           </TouchableOpacity>
         </View>
         <TouchableOpacity
