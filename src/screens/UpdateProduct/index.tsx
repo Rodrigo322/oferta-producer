@@ -16,7 +16,7 @@ import { Plus } from "phosphor-react-native";
 import { useTabContext } from "../../contexts/TabContext";
 import { api } from "../../services/api";
 
-export function CreateProduct() {
+export function UpdateProduct() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");

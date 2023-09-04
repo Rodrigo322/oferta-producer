@@ -17,6 +17,7 @@ import { AddressProfile } from "../screens/AddressProfile";
 import { Profile } from "../screens/Profile";
 import { ResetPassword } from "../screens/ResetPassword";
 import { DeactivateAccount } from "../screens/DeactivateAccount";
+import { CreateBanks } from "../screens/CreateBanks";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -133,6 +134,13 @@ export function TabRoutes() {
           tabBarIcon: ({ color }) => (
             <UserGear color={color} size={30} weight="fill" />
           ),
+        }}
+      />
+      <Screen
+        name="CreateBanks"
+        component={CreateBanks}
+        options={{
+          tabBarButton: () => null,
         }}
       />
     </Navigator>

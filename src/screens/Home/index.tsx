@@ -37,7 +37,6 @@ export function Home() {
     api
       .get<ProductsResponse[]>(`/get-all-product/store/${idBank}`)
       .then((response) => {
-        console.log(JSON.stringify(response.data, null, 2));
         setProducts(response.data);
         setLoading(false);
       });

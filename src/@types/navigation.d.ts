@@ -12,6 +12,7 @@ export declare global {
       Profile: undefined;
       ResetPassword: undefined;
       DeactivateAccount: undefined;
+      CreateBanks: undefined;
     }
   }
 }

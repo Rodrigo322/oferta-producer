@@ -28,6 +28,7 @@ export function MyBanks() {
   const { setShowTab, setIdBank } = useTabContext();
 
   const { navigate } = useNavigation();
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -35,7 +36,7 @@ export function MyBanks() {
       setBanking(response.data);
       setLoading(false);
     });
-  }, []);
+  }, [refresh]);
 
   async function handlerSelectedBank(id: string) {
     setIdBank(id);
@@ -52,7 +53,16 @@ export function MyBanks() {
       }}
     >
       <HeaderReturn title="Minhas Bancas" />
-      <View style={{ marginTop: 20 }} />
+
+      <View>
+        <TouchableOpacity
+          onPress={() => setRefresh(!refresh)}
+          style={styles.buttonRefresh}
+        >
+          <Text style={styles.buttonText}>Atualizar</Text>
+        </TouchableOpacity>
+      </View>
+
       {loading && <ActivityIndicator size="large" color="#019972" />}
       {!loading && (
         <View style={styles.listHomeProduct}>
@@ -68,7 +78,11 @@ export function MyBanks() {
           ))}
         </View>
       )}
-      <TouchableOpacity style={styles.button}>
+
+      <TouchableOpacity
+        onPress={() => navigate("CreateBanks")}
+        style={styles.button}
+      >
         <Text style={styles.buttonText}>Criar nova banca</Text>
       </TouchableOpacity>
     </View>
@@ -82,7 +96,7 @@ export const styles = StyleSheet.create({
     marginRight: 15,
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
   cardBanking: {
@@ -118,6 +132,14 @@ export const styles = StyleSheet.create({
     elevation: 2,
     bottom: 0,
     position: "absolute",
+  },
+  buttonRefresh: {
+    width: "100%",
+    height: 60,
+    backgroundColor: "#019972",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
   },
   buttonText: {
     fontSize: 18,
