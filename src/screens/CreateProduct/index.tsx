@@ -60,9 +60,12 @@ export function CreateProduct() {
         type: "image/jpeg",
       } as any);
     }
-    console.log("esse o id da banca " + idBank);
-    const response = await api.post(`/create-product/${idBank}`, formData);
-    console.log("esse o id da banca " + response);
+    console.log(JSON.stringify(formData, null, 2));
+    const response = await api.post(
+      `/create-product/573f5021-8c8b-4690-a86c-16c5e90d692e`,
+      formData
+    );
+    console.log("esse o id da banca " + response.status);
     setLoading(false);
   }
 

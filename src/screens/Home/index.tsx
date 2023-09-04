@@ -15,11 +15,13 @@ import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useTabContext } from "../../contexts/TabContext";
 import { useNavigation } from "@react-navigation/native";
+import { refresh } from "@react-native-community/netinfo";
 
 interface ProductsResponse {
   id: string;
   name: string;
   price: number;
+  description: string;
   image: string;
   quantity: number;
 }
@@ -31,6 +33,7 @@ export function Home() {
   const { idBank } = useTabContext();
 
   const { navigate } = useNavigation();
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +43,7 @@ export function Home() {
         setProducts(response.data);
         setLoading(false);
       });
-  }, [idBank]);
+  }, [idBank, refresh]);
 
   return (
     <View
@@ -115,7 +118,17 @@ export function Home() {
                       QTD: {product.quantity}
                     </Text>
                   </View>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigate("UpdateProduct", {
+                        id: product.id,
+                        name: product.name,
+                        description: product.description,
+                        price: product.price,
+                        quantity: product.quantity,
+                      })
+                    }
+                  >
                     <PencilLine color="#075E55" size={25} weight="fill" />
                   </TouchableOpacity>
                   <TouchableOpacity>
@@ -127,6 +140,12 @@ export function Home() {
           )}
         </View>
       </ScrollView>
+      <TouchableOpacity
+        onPress={() => setRefresh(!refresh)}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Atualizar</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -165,5 +184,20 @@ export const styles = StyleSheet.create({
   cartProductButtonsText: {
     padding: 10,
     color: "#075E55",
+  },
+  button: {
+    width: "100%",
+    height: 60,
+    backgroundColor: "#019972",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+    bottom: 0,
+    position: "absolute",
+  },
+
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
   },
 });

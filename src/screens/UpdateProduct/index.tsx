@@ -1,7 +1,5 @@
 import {
   ActivityIndicator,
-  Alert,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,123 +7,123 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import * as ImagePicker from "expo-image-picker";
 import { HeaderReturn } from "../../components/HeaderReturn";
-import { useState } from "react";
-import { Plus } from "phosphor-react-native";
+import { useEffect, useState } from "react";
 import { useTabContext } from "../../contexts/TabContext";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { api } from "../../services/api";
 
+interface ProductsResponse {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string;
+  quantity: number;
+}
+
 export function UpdateProduct() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [photos, setPhotos] = useState<string>();
-  const { idBank } = useTabContext();
+  const route = useRoute();
+  const {
+    id,
+    name: UpdateName,
+    description: UpdateDescription,
+    price: UpdatePrice,
+    quantity: UpdateQuantity,
+  } = route.params as ProductsResponse;
+
+  const [name, setName] = useState(UpdateName);
+  const [description, setDescription] = useState(UpdateDescription);
+  const [price, setPrice] = useState(UpdatePrice);
+  const [quantity, setQuantity] = useState(UpdateQuantity);
   const [loading, setLoading] = useState(false);
 
-  async function handleSelectImages() {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const navigation = useNavigation();
 
-    if (status !== "granted") {
-      Alert.alert("Eitá, precisamos de acesso ás suas fotos..");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      quality: 1,
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    });
-
-    if (!result.canceled) {
-      const { uri: photo } = result as unknown as ImagePicker.ImagePickerAsset;
-      setPhotos(photo);
-    }
-  }
-
-  async function handleCreateProduct() {
+  async function handleUpdateProduct() {
     setLoading(true);
-    const formData = new FormData();
-
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("quantity", quantity);
-    if (photos) {
-      formData.append("image", {
-        name: `image.jpeg`,
-        uri: photos,
-        type: "image/jpeg",
-      } as any);
-    }
-    console.log("esse o id da banca " + idBank);
-    const response = await api.post(`/create-product/${idBank}`, formData);
-    console.log("esse o id da banca " + response);
+    const response = await api.put(`/update-product/${id}`, {
+      name,
+      description,
+      price,
+      quantity,
+    });
     setLoading(false);
+    if (response.data.error) {
+      alert(response.data.error);
+    } else {
+      alert("Produto atualizado com sucesso!");
+      navigation.goBack();
+    }
   }
+
+  useEffect(() => {
+    setName(UpdateName);
+    setDescription(UpdateDescription);
+    setPrice(UpdatePrice);
+    setQuantity(UpdateQuantity);
+  }, [id]);
+
+  const handleTextChangePrice = (price) => {
+    const newNumber = parseFloat(price);
+    if (!isNaN(newNumber)) {
+      setPrice(newNumber);
+    }
+  };
+
+  const handleTextChangeQuantity = (quantity) => {
+    const newNumber = parseFloat(quantity);
+    if (!isNaN(newNumber)) {
+      setQuantity(newNumber);
+    }
+  };
 
   return (
     <View>
-      <HeaderReturn title="Cadastro de produtos" />
+      <HeaderReturn title="Atualizar Produto" />
       <ScrollView>
         <View style={styles.containerInput}>
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Nome</Text>
             <TextInput
+              value={name}
               onChangeText={setName}
               style={styles.input}
-              placeholder="Ex: Batata"
             />
           </View>
-
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Descrição</Text>
             <TextInput
+              value={description}
               onChangeText={setDescription}
               style={styles.input}
-              placeholder="Ex: Batata Inglesa"
             />
           </View>
-
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Preço</Text>
             <TextInput
-              onChangeText={setPrice}
+              value={price.toString()}
+              onChangeText={handleTextChangePrice}
               style={styles.input}
-              placeholder="Ex: 8.99"
+              keyboardType="numeric"
             />
           </View>
-
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Quantidade</Text>
             <TextInput
-              onChangeText={setQuantity}
+              value={quantity.toString()}
+              onChangeText={handleTextChangeQuantity}
               style={styles.input}
-              placeholder="Ex: 200"
+              keyboardType="numeric"
             />
           </View>
-          <Text style={styles.labelInput}>Imagens do produto</Text>
-
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.uploadedImagesContainer}>
-              <Image
-                key={photos}
-                source={{ uri: photos }}
-                style={styles.uploadedImage}
-              />
-              <TouchableOpacity
-                style={styles.imagesInput}
-                onPress={handleSelectImages}
-              >
-                <Plus color="#075E55" size={32} />
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-
-          <TouchableOpacity onPress={handleCreateProduct} style={styles.button}>
-            <Text style={styles.labelButton}>Cadastrar</Text>
+          <TouchableOpacity
+            disabled={loading}
+            onPress={handleUpdateProduct}
+            style={styles.button}
+          >
+            {loading && <ActivityIndicator size="large" color="#fff" />}
+            {!loading && <Text style={styles.labelButton}>Atualizar</Text>}
           </TouchableOpacity>
         </View>
       </ScrollView>
