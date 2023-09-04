@@ -58,6 +58,7 @@ export function Home() {
         <View
           style={{
             paddingTop: 40,
+            paddingBottom: 70,
             paddingHorizontal: 20,
           }}
         >

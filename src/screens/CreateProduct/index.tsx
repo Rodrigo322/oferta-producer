@@ -40,8 +40,7 @@ export function CreateProduct() {
     });
 
     if (!result.canceled) {
-      const { uri: photo } = result as unknown as ImagePicker.ImagePickerAsset;
-      setPhotos(photo);
+      setPhotos(result.assets[0].uri);
     }
   }
 
@@ -55,17 +54,16 @@ export function CreateProduct() {
     formData.append("quantity", quantity);
     if (photos) {
       formData.append("image", {
-        name: `image.jpeg`,
+        name: `image-${Math.random}.jpeg`,
         uri: photos,
         type: "image/jpeg",
       } as any);
     }
-    console.log(JSON.stringify(formData, null, 2));
-    const response = await api.post(
-      `/create-product/573f5021-8c8b-4690-a86c-16c5e90d692e`,
-      formData
-    );
-    console.log("esse o id da banca " + response.status);
+    const response = await api.post(`/create-product/${idBank}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     setLoading(false);
   }
 
