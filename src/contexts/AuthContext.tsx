@@ -45,7 +45,7 @@ export function AuthProvider({ children }: any) {
   const [token, setToken] = useState<Token | null>(null);
   const [userName, setUserName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { setIdBank } = useTabContext();
+  const { setIdBank, setShowTab } = useTabContext();
 
   useEffect(() => {
     const loadStoredData = async () => {
@@ -116,6 +116,7 @@ export function AuthProvider({ children }: any) {
     setLoading(false);
     setUserName("");
     setIdBank("");
+    setShowTab(false);
   }
 
   const authContextValue: AuthContextType = {

@@ -47,45 +47,53 @@ export function Orders() {
       )}
       <View style={styles.container}>
         {!loading && (
-          <ScrollView>
-            {request.map((req) => (
-              <Pressable
-                onPress={() => navigate("DetailsOrders", { id: req.id })}
-                key={req.id}
-                style={[
-                  styles.RequestCard,
-                  req.status === "OPEN"
-                    ? {
-                        backgroundColor: "#FFF1DC",
-                        borderColor: "#d46b71",
-                      }
-                    : { backgroundColor: "#fff" },
-                ]}
-              >
-                <Image source={LogoImg} style={styles.RequestImage} />
-                <View style={styles.RequestContent}>
-                  <Text style={styles.RequestTitle}>
-                    Pedido do {req.buyer.name}
-                  </Text>
-                  {/* <Text style={styles.RequestAbout}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View
+              style={{
+                marginBottom: 20,
+                paddingBottom: 90,
+                width: "100%",
+              }}
+            >
+              {request.map((req) => (
+                <Pressable
+                  onPress={() => navigate("DetailsOrders", { id: req.id })}
+                  key={req.id}
+                  style={[
+                    styles.RequestCard,
+                    req.status === "OPEN"
+                      ? {
+                          backgroundColor: "#FFF1DC",
+                          borderColor: "#d46b71",
+                        }
+                      : { backgroundColor: "#fff" },
+                  ]}
+                >
+                  <Image source={LogoImg} style={styles.RequestImage} />
+                  <View style={styles.RequestContent}>
+                    <Text style={styles.RequestTitle}>
+                      Pedido do {req.buyer.name}
+                    </Text>
+                    {/* <Text style={styles.RequestAbout}>
                     R$ {req.total_value.toFixed(2)}
                   </Text> */}
-                  <Text style={styles.RequestAbout}>
-                    {req.status === "OPEN"
-                      ? "AGUARDANDO APROVAÇÃO"
-                      : "FINALIZADO"}
-                  </Text>
-                </View>
-              </Pressable>
-            ))}
+                    <Text style={styles.RequestAbout}>
+                      {req.status === "OPEN"
+                        ? "AGUARDANDO APROVAÇÃO"
+                        : "FINALIZADO"}
+                    </Text>
+                  </View>
+                </Pressable>
+              ))}
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => setRefresh(!refresh)}
+              >
+                <Text style={styles.labelButton}>Atualizar</Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         )}
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setRefresh(!refresh)}
-        >
-          <Text style={styles.labelButton}>Atualizar</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -139,10 +147,6 @@ export const styles = StyleSheet.create({
     color: "#fff",
   },
   button: {
-
-
-
-
     height: 60,
     backgroundColor: "#075E55",
     borderRadius: 7,
