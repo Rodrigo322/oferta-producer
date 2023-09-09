@@ -41,6 +41,12 @@ function isTokenValid(token: string | null): boolean {
   return false;
 }
 
+async function fetchUserData(token: string) {
+  api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const user = await api.get("/unique-user");
+  return user.data.name;
+}
+
 export function AuthProvider({ children }: any) {
   const [token, setToken] = useState<Token | null>(null);
   const [userName, setUserName] = useState("");
@@ -48,35 +54,34 @@ export function AuthProvider({ children }: any) {
   const { setIdBank, setShowTab } = useTabContext();
 
   useEffect(() => {
-    const loadStoredData = async () => {
-      const isConnected = await checkInternetConnection();
-      if (!isConnected) {
-        Alert.alert("Sem conexão", "Você está sem conexão com a internet.");
-        return;
-      }
-      const storageToken = await AsyncStorage.getItem("@storage:token");
-
-      if (isTokenValid(storageToken)) {
-        setToken({ token: storageToken });
-        api.defaults.headers.common["Authorization"] = `Bearer ${storageToken}`;
-        api.get("/unique-user").then((user) => {
-          setUserName(user.data.name);
-        });
-      } else {
-        await logout();
-      }
-    };
     loadStoredData();
-  }, [token]);
+  }, []);
+
+  const loadStoredData = async () => {
+    const isConnected = await checkInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+    const storageToken = await AsyncStorage.getItem("@storage:token");
+
+    if (isTokenValid(storageToken)) {
+      setToken({ token: storageToken });
+      const userName = await fetchUserData(storageToken);
+      setUserName(userName);
+    } else {
+      Alert.alert("Atenção", "Sua sessão  expirou faça login novamente");
+      await logout();
+    }
+  };
 
   async function login(email: string, password: string) {
     try {
+      setLoading(true);
       const isConnected = await checkInternetConnection();
       if (!isConnected) {
         Alert.alert("Sem conexão", "Você está sem conexão com a internet.");
         return;
       }
-      setLoading(true);
       const response = await api.post("/sign-in", {
         email,
         password,
@@ -89,13 +94,10 @@ export function AuthProvider({ children }: any) {
       const { token } = response.data;
 
       setToken(token);
-
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
       await AsyncStorage.setItem("@storage:token", token);
-      api.get("/unique-user").then((user) => {
-        setUserName(user.data.name);
-      });
+      const userName = await fetchUserData(token);
+      setUserName(userName);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -112,7 +114,6 @@ export function AuthProvider({ children }: any) {
     setToken(null);
     delete api.defaults.headers.common["Authorization"];
     await AsyncStorage.removeItem("@storage:token");
-    await AsyncStorage.clear();
     setLoading(false);
     setUserName("");
     setIdBank("");

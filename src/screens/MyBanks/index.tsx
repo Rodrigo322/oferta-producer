@@ -32,7 +32,7 @@ export function MyBanks() {
 
   useEffect(() => {
     setLoading(true);
-    api.get<BankingResponse[]>("/stores").then((response) => {
+    api.get<BankingResponse[]>("/get-all-store-by-owner").then((response) => {
       setBanking(response.data);
       setLoading(false);
     });
@@ -76,6 +76,9 @@ export function MyBanks() {
               <Text style={styles.cardBankingTitle}>{bank.name}</Text>
             </TouchableOpacity>
           ))}
+          {banking.length === 0 && (
+            <Text style={styles.textEmpty}>Nenhuma bancada encontrada</Text>
+          )}
         </View>
       )}
 
@@ -144,5 +147,11 @@ export const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     color: "#fff",
+  },
+  textEmpty: {
+    textAlign: "center",
+    fontWeight: "600",
+    fontSize: 14,
+    color: "#075E55",
   },
 });

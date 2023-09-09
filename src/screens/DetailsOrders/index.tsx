@@ -133,17 +133,37 @@ export function DetailsOrders() {
                       </View>
                     </View>
                   ))}
-                  <TouchableOpacity
-                    disabled={detailsSale.status === "OPEN" ? false : true}
-                    style={styles.button}
-                    onPress={updateDetailsOrder}
+                  <View
+                    style={{
+                      alignItems: "center",
+                      width: "100%",
+                      gap: 20,
+                    }}
                   >
-                    <Text style={styles.labelButton}>
-                      {detailsSale.status === "OPEN"
-                        ? "Aprovar Pedido"
-                        : "Pedido Aprovado"}
-                    </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      disabled={detailsSale.status === "OPEN" ? false : true}
+                      style={styles.button}
+                      onPress={updateDetailsOrder}
+                    >
+                      <Text style={styles.labelButton}>
+                        {detailsSale.status === "OPEN"
+                          ? "Aprovar Pedido"
+                          : "Pedido Aprovado"}
+                      </Text>
+                    </TouchableOpacity>
+
+                    {detailsSale.status === "CLOSED" && (
+                      <TouchableOpacity
+                        style={[styles.button, { backgroundColor: "#FFF159" }]}
+                      >
+                        <Text
+                          style={[styles.labelButton, { color: "#075E55" }]}
+                        >
+                          Notificar cliente
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
               </ScrollView>
             </>

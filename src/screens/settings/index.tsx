@@ -1,10 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import {
+  AddressBook,
   Article,
   CaretRight,
+  Database,
   Door,
   Envelope,
   EnvelopeOpen,
+  HouseSimple,
   IdentificationBadge,
   LockKey,
   MapPin,
@@ -14,24 +17,26 @@ import {
   WhatsappLogo,
   XSquare,
 } from "phosphor-react-native";
-import { useState } from "react";
+import React, { useState } from "react";
 import { TouchableOpacity, ScrollView, View, Text } from "react-native";
 
 import { HeaderReturn } from "../../components/HeaderReturn";
 import { ModalApp } from "../../components/Modal";
 import { useAuth } from "../../contexts/AuthContext";
 import { styles } from "./styles";
+import { useTabContext } from "../../contexts/TabContext";
 
 export function Settings() {
   const { logout, userName } = useAuth();
   const { navigate } = useNavigation();
+  const { setIdBank, setShowTab } = useTabContext();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalHelpVisible, setIsModalHelpVisible] = useState(false);
   const [isModalSignOutVisible, setIsModalSignOutVisible] = useState(false);
 
   function handleSignOut() {
-    logout();
+    setIdBank(""), setShowTab(false), logout();
   }
 
   return (
@@ -89,6 +94,16 @@ export function Settings() {
               </View>
               <CaretRight color="#019972" size={32} weight="thin" />
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigate("MyHistory")}
+              style={styles.settingContainerOptionsGroup}
+            >
+              <View style={styles.settingContainerOptionsIcon}>
+                <AddressBook color="#019972" size={32} weight="thin" />
+                <Text style={styles.settingOptionsText}>Minha Historia</Text>
+              </View>
+              <CaretRight color="#019972" size={32} weight="thin" />
+            </TouchableOpacity>
           </View>
         </View>
         <Text
@@ -97,6 +112,26 @@ export function Settings() {
           Geral
         </Text>
         <View style={{ alignItems: "center", gap: 10, paddingBottom: 200 }}>
+          <TouchableOpacity
+            onPress={() => {
+              setIdBank(""), setShowTab(false), navigate("MyBanks");
+            }}
+            style={[
+              styles.settingContainerOptionsGroup,
+              {
+                backgroundColor: "#005047",
+                borderColor: "#fff",
+              },
+            ]}
+          >
+            <View style={styles.settingContainerOptionsIcon}>
+              <Database color="#fff" size={32} weight="thin" />
+              <Text style={[styles.settingOptionsText, { color: "#FFF" }]}>
+                Alterar banca
+              </Text>
+            </View>
+            <CaretRight color="#fff" size={32} weight="thin" />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setIsModalVisible(true)}
             style={[

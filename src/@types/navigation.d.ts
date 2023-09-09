@@ -13,6 +13,8 @@ export declare global {
       ResetPassword: undefined;
       DeactivateAccount: undefined;
       CreateBanks: undefined;
+      MyHistory: undefined;
+      MyBanks: undefined;
       UpdateProduct: {
         id: string;
         name: string;

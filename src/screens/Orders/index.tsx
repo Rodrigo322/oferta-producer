@@ -18,9 +18,7 @@ import LogoImg from "../../assets/ofairta.png";
 interface RequestResponseProps {
   id: string;
   total_value: number;
-  buyer: {
-    name: string;
-  };
+  buyer: { name: string };
   status: string;
 }
 
@@ -38,6 +36,12 @@ export function Orders() {
       setLoading(false);
     });
   }, [refresh]);
+
+  request.sort((a, b) => {
+    if (a.status === "OPEN" && b.status !== "OPEN") return -1;
+    if (a.status !== "OPEN" && b.status === "OPEN") return 1;
+    return 0;
+  });
 
   return (
     <View style={{ backgroundColor: "#DFEDE9", flex: 1 }}>
@@ -74,9 +78,9 @@ export function Orders() {
                     <Text style={styles.RequestTitle}>
                       Pedido do {req.buyer.name}
                     </Text>
-                    {/* <Text style={styles.RequestAbout}>
-                    R$ {req.total_value.toFixed(2)}
-                  </Text> */}
+                    <Text style={styles.RequestAbout}>
+                      R$ {req.total_value.toFixed(2)}
+                    </Text>
                     <Text style={styles.RequestAbout}>
                       {req.status === "OPEN"
                         ? "AGUARDANDO APROVAÇÃO"
@@ -85,24 +89,25 @@ export function Orders() {
                   </View>
                 </Pressable>
               ))}
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => setRefresh(!refresh)}
-              >
-                <Text style={styles.labelButton}>Atualizar</Text>
-              </TouchableOpacity>
             </View>
           </ScrollView>
         )}
       </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setRefresh(!refresh)}
+      >
+        <Text style={styles.labelButton}>Atualizar</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 export const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    // alignItems: "center",
+    flex: 1,
+    paddingHorizontal: 10,
+    position: "relative",
   },
   myRequestContainer: {
     padding: 40,
@@ -147,11 +152,13 @@ export const styles = StyleSheet.create({
     color: "#fff",
   },
   button: {
+    width: "100%",
     height: 60,
-    backgroundColor: "#075E55",
-    borderRadius: 7,
+    backgroundColor: "#019972",
     justifyContent: "center",
     alignItems: "center",
     elevation: 2,
+    bottom: 0,
+    position: "absolute",
   },
 });

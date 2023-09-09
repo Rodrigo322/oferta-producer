@@ -22,7 +22,12 @@ export function CreateBanks() {
     setLoading(false);
   }
   return (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#DFEDE9",
+      }}
+    >
       <HeaderReturn title="Cadastro de Bancas" />
       <View style={styles.containerInput}>
         <View style={styles.inputGroup}>
@@ -40,6 +45,7 @@ export function CreateBanks() {
             onChangeText={setDescription}
             style={[styles.input, styles.inputDescription]}
             placeholder="Ex: Vendemos hortaliças"
+            textAlignVertical="top"
           />
         </View>
 
@@ -86,6 +92,7 @@ export const styles = StyleSheet.create({
     borderColor: "#075E55",
     borderRadius: 10,
     paddingHorizontal: 15,
+    paddingVertical: 15,
   },
   inputDescription: {
     height: 120,

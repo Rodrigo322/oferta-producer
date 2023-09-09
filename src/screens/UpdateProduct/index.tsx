@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { HeaderReturn } from "../../components/HeaderReturn";
 import { useEffect, useState } from "react";
-import { useTabContext } from "../../contexts/TabContext";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { api } from "../../services/api";
 
@@ -34,8 +33,8 @@ export function UpdateProduct() {
 
   const [name, setName] = useState(UpdateName);
   const [description, setDescription] = useState(UpdateDescription);
-  const [price, setPrice] = useState(UpdatePrice);
-  const [quantity, setQuantity] = useState(UpdateQuantity);
+  const [price, setPrice] = useState(UpdatePrice.toString());
+  const [quantity, setQuantity] = useState(UpdateQuantity.toString());
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
@@ -45,8 +44,8 @@ export function UpdateProduct() {
     const response = await api.put(`/update-product/${id}`, {
       name,
       description,
-      price,
-      quantity,
+      price: parseFloat(price),
+      quantity: parseFloat(quantity),
     });
     setLoading(false);
     if (response.data.error) {
@@ -60,22 +59,16 @@ export function UpdateProduct() {
   useEffect(() => {
     setName(UpdateName);
     setDescription(UpdateDescription);
-    setPrice(UpdatePrice);
-    setQuantity(UpdateQuantity);
+    setPrice(UpdatePrice.toString());
+    setQuantity(UpdateQuantity.toString());
   }, [id]);
 
-  const handleTextChangePrice = (price) => {
-    const newNumber = parseFloat(price);
-    if (!isNaN(newNumber)) {
-      setPrice(newNumber);
-    }
+  const handleTextChangePrice = (text) => {
+    setPrice(text);
   };
 
-  const handleTextChangeQuantity = (quantity) => {
-    const newNumber = parseFloat(quantity);
-    if (!isNaN(newNumber)) {
-      setQuantity(newNumber);
-    }
+  const handleTextChangeQuantity = (text) => {
+    setQuantity(text);
   };
 
   return (
@@ -102,7 +95,7 @@ export function UpdateProduct() {
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Preço</Text>
             <TextInput
-              value={price.toString()}
+              value={price}
               onChangeText={handleTextChangePrice}
               style={styles.input}
               keyboardType="numeric"
@@ -111,7 +104,7 @@ export function UpdateProduct() {
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Quantidade</Text>
             <TextInput
-              value={quantity.toString()}
+              value={quantity}
               onChangeText={handleTextChangeQuantity}
               style={styles.input}
               keyboardType="numeric"
@@ -171,8 +164,6 @@ export const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 9,
-    // marginTop: 20,
-    // marginBottom: 20,
     marginRight: 8,
   },
   imagesInput: {
@@ -185,7 +176,6 @@ export const styles = StyleSheet.create({
     height: 64,
     justifyContent: "center",
     alignItems: "center",
-    // marginTop: 15,
   },
 
   button: {

@@ -36,11 +36,12 @@ export function SignUp() {
 
   async function handleCreateUser() {
     setLoading(true);
+
     const response = await api.post("/create-user", {
-      name,
-      email,
-      password,
-      cpf,
+      name: name.toLocaleLowerCase().trim(),
+      email: email.toLocaleLowerCase().trim(),
+      password: password.trim(),
+      cpf: cpf.trim(),
       accessLevelName: "Vendedor",
     });
 

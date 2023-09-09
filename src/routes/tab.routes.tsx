@@ -19,6 +19,7 @@ import { ResetPassword } from "../screens/ResetPassword";
 import { DeactivateAccount } from "../screens/DeactivateAccount";
 import { CreateBanks } from "../screens/CreateBanks";
 import { UpdateProduct } from "../screens/UpdateProduct";
+import { MyHistory } from "../screens/MyHistory";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -147,6 +148,13 @@ export function TabRoutes() {
       <Screen
         name="CreateBanks"
         component={CreateBanks}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <Screen
+        name="MyHistory"
+        component={MyHistory}
         options={{
           tabBarButton: () => null,
         }}
