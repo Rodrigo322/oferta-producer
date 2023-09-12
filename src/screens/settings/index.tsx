@@ -25,6 +25,7 @@ import { ModalApp } from "../../components/Modal";
 import { useAuth } from "../../contexts/AuthContext";
 import { styles } from "./styles";
 import { useTabContext } from "../../contexts/TabContext";
+import { SettingOption } from "../../components/SettingOption";
 
 export function Settings() {
   const { logout, userName } = useAuth();
@@ -51,59 +52,31 @@ export function Settings() {
         <View style={styles.settingsContainerOptions}>
           <Text style={styles.settingOptionTitle}>Minha Conta</Text>
           <View style={{ alignItems: "center", gap: 10 }}>
-            <TouchableOpacity
-              style={[
-                styles.settingContainerOptionsGroup,
-                styles.settingContainerOptionsGroupFirst,
-              ]}
+            <SettingOption
+              title="Meus Endereços"
               onPress={() => navigate("AddressProfile")}
-            >
-              <View style={styles.settingContainerOptionsIcon}>
-                <MapPin color="#019972" size={32} weight="thin" />
-                <Text style={styles.settingOptionsText}>Meus Endereços</Text>
-              </View>
-              <CaretRight color="#019972" size={32} weight="thin" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.settingContainerOptionsGroup}
+              icon={<MapPin />}
+            />
+            <SettingOption
+              title="Dados pessoais"
               onPress={() => navigate("Profile")}
-            >
-              <View style={styles.settingContainerOptionsIcon}>
-                <IdentificationBadge color="#019972" size={32} weight="thin" />
-                <Text style={styles.settingOptionsText}>Dados pessoais</Text>
-              </View>
-              <CaretRight color="#019972" size={32} weight="thin" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.settingContainerOptionsGroup}
+              icon={<IdentificationBadge />}
+            />
+            <SettingOption
+              title="Alterar senha"
               onPress={() => navigate("ResetPassword")}
-            >
-              <View style={styles.settingContainerOptionsIcon}>
-                <LockKey color="#019972" size={32} weight="thin" />
-                <Text style={styles.settingOptionsText}>Alterar senha</Text>
-              </View>
-              <CaretRight color="#019972" size={32} weight="thin" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.settingContainerOptionsGroup}
+              icon={<LockKey />}
+            />
+            <SettingOption
+              title="Desativar conta"
               onPress={() => navigate("DeactivateAccount")}
-            >
-              <View style={styles.settingContainerOptionsIcon}>
-                <XSquare color="#019972" size={32} weight="thin" />
-                <Text style={styles.settingOptionsText}>Desativar conta</Text>
-              </View>
-              <CaretRight color="#019972" size={32} weight="thin" />
-            </TouchableOpacity>
-            <TouchableOpacity
+              icon={<XSquare />}
+            />
+            <SettingOption
+              title="Minha Historia"
               onPress={() => navigate("MyHistory")}
-              style={styles.settingContainerOptionsGroup}
-            >
-              <View style={styles.settingContainerOptionsIcon}>
-                <AddressBook color="#019972" size={32} weight="thin" />
-                <Text style={styles.settingOptionsText}>Minha Historia</Text>
-              </View>
-              <CaretRight color="#019972" size={32} weight="thin" />
-            </TouchableOpacity>
+              icon={<AddressBook />}
+            />
           </View>
         </View>
         <Text
@@ -112,68 +85,32 @@ export function Settings() {
           Geral
         </Text>
         <View style={{ alignItems: "center", gap: 10, paddingBottom: 200 }}>
-          <TouchableOpacity
+          <SettingOption
+            title="Alterar banca"
             onPress={() => {
-              setIdBank(""), setShowTab(false), navigate("MyBanks");
+              setIdBank("");
+              setShowTab(false);
+              navigate("MyBanks");
             }}
-            style={[
-              styles.settingContainerOptionsGroup,
-              {
-                backgroundColor: "#005047",
-                borderColor: "#fff",
-              },
-            ]}
-          >
-            <View style={styles.settingContainerOptionsIcon}>
-              <Database color="#fff" size={32} weight="thin" />
-              <Text style={[styles.settingOptionsText, { color: "#FFF" }]}>
-                Alterar banca
-              </Text>
-            </View>
-            <CaretRight color="#fff" size={32} weight="thin" />
-          </TouchableOpacity>
-          <TouchableOpacity
+            icon={<Database />}
+            textColor="#fff"
+          />
+          <SettingOption
+            title="Sobre o OFairTa"
             onPress={() => setIsModalVisible(true)}
-            style={[
-              styles.settingContainerOptionsGroup,
-              styles.settingContainerOptionsGroupFirst,
-            ]}
-          >
-            <View style={styles.settingContainerOptionsIcon}>
-              <Article color="#019972" size={32} weight="thin" />
-              <Text style={styles.settingOptionsText}>Sobre o OFairTa</Text>
-            </View>
-            <CaretRight color="#019972" size={32} weight="thin" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
+            icon={<Article />}
+          />
+          <SettingOption
+            title="Preciso de ajuda?"
             onPress={() => setIsModalHelpVisible(!isModalHelpVisible)}
-            style={styles.settingContainerOptionsGroup}
-          >
-            <View style={styles.settingContainerOptionsIcon}>
-              <Question color="#019972" size={32} weight="thin" />
-              <Text style={styles.settingOptionsText}>Preciso de ajuda?</Text>
-            </View>
-            <CaretRight color="#019972" size={32} weight="thin" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
+            icon={<Question />}
+          />
+          <SettingOption
+            title="Sair"
             onPress={() => setIsModalSignOutVisible(!isModalSignOutVisible)}
-            style={styles.settingContainerOptionsGroup}
-          >
-            <View style={styles.settingContainerOptionsIcon}>
-              <Door color="#d46b71" size={32} weight="thin" />
-              <Text
-                style={[
-                  styles.settingOptionsText,
-                  styles.settingOptionsTextEnd,
-                ]}
-              >
-                Sair
-              </Text>
-            </View>
-            <SignOut color="#d46b71" size={32} weight="thin" />
-          </TouchableOpacity>
+            icon={<Door />}
+            textColor="#fff"
+          />
         </View>
       </ScrollView>
 
@@ -339,7 +276,18 @@ export function Settings() {
             gap: 25,
           }}
         >
-          <TouchableOpacity onPress={handleSignOut} style={styles.button}>
+          <TouchableOpacity
+            onPress={handleSignOut}
+            style={{
+              width: "40%",
+              height: 45,
+              backgroundColor: "#d46b71",
+              borderRadius: 16,
+              elevation: 5,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Text style={{ color: "#FFF" }}>Sim</Text>
           </TouchableOpacity>
           <TouchableOpacity

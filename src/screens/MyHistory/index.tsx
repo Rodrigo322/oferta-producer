@@ -6,24 +6,23 @@ import {
   View,
 } from "react-native";
 import { HeaderReturn } from "../../components/HeaderReturn";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { MyTextInput } from "../../components/MyTextInput";
 
 export function MyHistory() {
   const [text, setText] = useState("");
   const [height, setHeight] = useState(4);
 
-  const onContentSizeChange = (contentWidth, contentHeight) => {
+  const onContentSizeChange = useCallback((contentWidth, contentHeight) => {
     setHeight(Math.max(40, contentHeight));
-  };
+  }, []);
 
   return (
     <View style={styles.container}>
       <HeaderReturn title="Minha Historia" />
       <View style={styles.containerHistory}>
-        <TextInput
-          placeholderTextColor="#005047"
-          style={[styles.input, { height }]}
-          multiline={true}
+        <MyTextInput
+          height={height}
           value={text}
           onChangeText={setText}
           onContentSizeChange={(e) =>
@@ -32,11 +31,12 @@ export function MyHistory() {
               e.nativeEvent.contentSize.height
             )
           }
-          textAlignVertical="top"
-          placeholder="Digite sua historia"
         />
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        accessibilityLabel="Salvar sua história"
+      >
         <Text style={styles.buttonText}>Salvar</Text>
       </TouchableOpacity>
     </View>

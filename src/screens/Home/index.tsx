@@ -1,7 +1,10 @@
 import { PencilLine, XCircle } from "phosphor-react-native";
 import {
   ActivityIndicator,
+  Alert,
+  FlatList,
   Image,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,11 +14,12 @@ import {
 import { HeaderReturn } from "../../components/HeaderReturn";
 
 import { useAuth } from "../../contexts/AuthContext";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useTabContext } from "../../contexts/TabContext";
 import { useNavigation } from "@react-navigation/native";
-import { refresh } from "@react-native-community/netinfo";
+import { ModalApp } from "../../components/Modal";
+import { ProductItem } from "../../components/ProductItem";
 
 interface ProductsResponse {
   id: string;
@@ -26,123 +30,190 @@ interface ProductsResponse {
   quantity: number;
 }
 
+// export function Home() {
+//   const { userName } = useAuth();
+//   const [loading, setLoading] = useState(false);
+//   const [products, setProducts] = useState([]);
+//   const { idBank } = useTabContext();
+//   const { navigate } = useNavigation();
+//   const [refresh, setRefresh] = useState(false);
+
+//   const fetchProducts = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await api.get(`/get-all-product/store/${idBank}`);
+//       setProducts(response.data);
+//     } catch (error) {
+//       console.error("Error fetching products:", error);
+//       // Display an error message to the user
+//       Alert.alert("Error", "Failed to fetch products.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchProducts();
+//   }, [idBank, refresh]);
+
+//   const handleDeleteProduct = async (id: string) => {
+//     try {
+//       const response = await api.delete(`/delete-product/${id}`);
+//       if (response.status === 200) {
+//         Alert.alert("Produto excluído com sucesso!");
+//         setRefresh(!refresh);
+//       }
+//     } catch (error) {
+//       console.error("Error deleting product:", error);
+//       Alert.alert("Error", "Failed to delete the product.");
+//     }
+//   };
+
+//   const handleUpdateProduct = (product: ProductsResponse) => {
+//     navigate("UpdateProduct", {
+//       id: product.id,
+//       name: product.name,
+//       description: product.description,
+//       price: product.price,
+//       quantity: product.quantity,
+//     });
+//   };
+
+//   return (
+//     <View
+//       style={{
+//         width: "100%",
+//         height: "100%",
+//         backgroundColor: "#DFEDE9",
+//       }}
+//     >
+//       <HeaderReturn title={`Olá, ${userName}`} />
+//       <View
+//         style={{
+//           paddingVertical: 20,
+//           paddingHorizontal: 20,
+//         }}
+//       >
+//         {loading && (
+//           <ActivityIndicator
+//             style={{ paddingTop: 50 }}
+//             size={50}
+//             color="#019972"
+//           />
+//         )}
+//         {!loading && (
+//           <FlatList
+//             data={products}
+//             keyExtractor={(item) => item.id.toString()}
+//             renderItem={({ item }) => (
+//               <ProductItem
+//                 product={item}
+//                 onDelete={handleDeleteProduct}
+//                 onUpdate={handleUpdateProduct}
+//               />
+//             )}
+//             ListEmptyComponent={() => <Text>Esta banca está sem produtos</Text>}
+//           />
+//         )}
+//       </View>
+
+//       <TouchableOpacity
+//         onPress={() => setRefresh(!refresh)}
+//         style={styles.button}
+//       >
+//         <Text style={styles.buttonText}>Atualizar</Text>
+//       </TouchableOpacity>
+//     </View>
+//   );
+// }
+
 export function Home() {
   const { userName } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState<ProductsResponse[]>([]);
+  const [products, setProducts] = useState([]);
   const { idBank } = useTabContext();
-
   const { navigate } = useNavigation();
-  const [refresh, setRefresh] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // Alterado o nome para evitar confusão
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get(`/get-all-product/store/${idBank}`);
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      // Display an error message to the user
+      Alert.alert("Error", "Failed to fetch products.");
+    } finally {
+      setLoading(false);
+      setRefreshing(false); // Ao concluir o carregamento, defina refreshing como false
+    }
+  };
 
   useEffect(() => {
-    setLoading(true);
-    api
-      .get<ProductsResponse[]>(`/get-all-product/store/${idBank}`)
-      .then((response) => {
-        setProducts(response.data);
-        setLoading(false);
-      });
-  }, [idBank, refresh]);
+    fetchProducts();
+  }, [idBank, refreshing]);
+
+  const handleDeleteProduct = async (id: string) => {
+    try {
+      const response = await api.delete(`/delete-product/${id}`);
+      if (response.status === 200) {
+        Alert.alert("Produto excluído com sucesso!");
+        setRefreshing(true); // Define refreshing como true para acionar a atualização
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      Alert.alert("Error", "Failed to delete the product.");
+    }
+  };
+
+  const handleUpdateProduct = (product: ProductsResponse) => {
+    navigate("UpdateProduct", {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      quantity: product.quantity,
+    });
+  };
 
   return (
     <View
       style={{
-        width: "100%",
-        height: "100%",
+        flex: 1, // Use flex: 1 para ocupar toda a tela
         backgroundColor: "#DFEDE9",
       }}
     >
       <HeaderReturn title={`Olá, ${userName}`} />
-      <ScrollView>
-        <View
-          style={{
-            paddingTop: 40,
-            paddingBottom: 70,
-            paddingHorizontal: 20,
-          }}
-        >
-          <View
-            style={{
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
-            <Text
-              style={{
-                color: "#075E55",
-                fontWeight: "500",
-                fontSize: 16,
-              }}
-            >
-              Meus produtos
-            </Text>
-            <TouchableOpacity onPress={() => navigate("CreateProduct")}>
-              <Text
-                style={{
-                  color: "#075E55",
-                  fontWeight: "500",
-                  fontSize: 16,
-                }}
-              >
-                Add mais produtos
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {loading && (
-            <ActivityIndicator
-              style={{ paddingTop: 50 }}
-              size={50}
-              color="#019972"
+      <View
+        style={{
+          paddingVertical: 20,
+          paddingHorizontal: 20,
+        }}
+      >
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <ProductItem
+              product={item}
+              onDelete={handleDeleteProduct}
+              onUpdate={handleUpdateProduct}
             />
           )}
+          ListEmptyComponent={() => <Text>Esta banca está sem produtos</Text>}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={fetchProducts} // A função de atualização
+              colors={["#019972"]} // Cor do indicador de carregamento
+            />
+          }
+        />
+      </View>
 
-          {!loading && (
-            <View style={{ alignItems: "center", paddingTop: 20 }}>
-              {products?.map((product) => (
-                <View key={product.id} style={styles.cartProduct}>
-                  <Image
-                    source={{ uri: product.image }}
-                    style={styles.cartProductImage}
-                  />
-                  <View style={styles.cartProductTextInfo}>
-                    <Text style={styles.cartProductText}>{product.name}</Text>
-                    <Text style={styles.cartProductText}>
-                      R$ {product.price}
-                    </Text>
-                  </View>
-
-                  <View style={styles.cartProductButtons}>
-                    <Text style={styles.cartProductButtonsText}>
-                      QTD: {product.quantity}
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigate("UpdateProduct", {
-                        id: product.id,
-                        name: product.name,
-                        description: product.description,
-                        price: product.price,
-                        quantity: product.quantity,
-                      })
-                    }
-                  >
-                    <PencilLine color="#075E55" size={25} weight="fill" />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <XCircle color="#d46b71" size={25} weight="fill" />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-      </ScrollView>
       <TouchableOpacity
-        onPress={() => setRefresh(!refresh)}
+        onPress={() => setRefreshing(true)} // Ao pressionar o botão, defina refreshing como true
         style={styles.button}
       >
         <Text style={styles.buttonText}>Atualizar</Text>
@@ -162,7 +233,7 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 10,
     backgroundColor: "#fff",
-    width: "95%",
+    width: "100%",
     elevation: 5,
   },
   cartProductImage: {

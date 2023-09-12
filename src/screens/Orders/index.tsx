@@ -13,7 +13,7 @@ import { HeaderReturn } from "../../components/HeaderReturn";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { api } from "../../services/api";
-import LogoImg from "../../assets/ofairta.png";
+import { OrderItem } from "../../components/OrderItem";
 
 interface RequestResponseProps {
   id: string;
@@ -23,71 +23,52 @@ interface RequestResponseProps {
 }
 
 export function Orders() {
-  const [request, setRequest] = useState<RequestResponseProps[]>([]);
+  const [orders, setOrders] = useState<RequestResponseProps[]>([]);
   const [loading, setLoading] = useState(false);
   const { navigate } = useNavigation();
-
   const [refresh, setRefresh] = useState(false);
 
-  useEffect(() => {
+  const fetchOrders = async () => {
     setLoading(true);
-    api.get("/get-all-sale-by-owner").then((response) => {
-      setRequest(response.data);
+    try {
+      const response = await api.get("/get-all-sale-by-owner");
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      Alert.alert("Error", "Failed to fetch orders.");
+    } finally {
       setLoading(false);
-    });
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
   }, [refresh]);
 
-  request.sort((a, b) => {
+  orders.sort((a, b) => {
     if (a.status === "OPEN" && b.status !== "OPEN") return -1;
     if (a.status !== "OPEN" && b.status === "OPEN") return 1;
     return 0;
   });
 
   return (
-    <View style={{ backgroundColor: "#DFEDE9", flex: 1 }}>
+    <View style={styles.container}>
       <HeaderReturn title="Meus Pedidos" />
       {loading && (
         <ActivityIndicator style={styles.loading} size={50} color="#019972" />
       )}
-      <View style={styles.container}>
+      <View style={styles.content}>
         {!loading && (
           <ScrollView showsVerticalScrollIndicator={false}>
             <View
-              style={{
-                marginBottom: 20,
-                paddingBottom: 90,
-                width: "100%",
-              }}
+              style={{ marginBottom: 20, paddingBottom: 90, width: "100%" }}
             >
-              {request.map((req) => (
-                <Pressable
-                  onPress={() => navigate("DetailsOrders", { id: req.id })}
-                  key={req.id}
-                  style={[
-                    styles.RequestCard,
-                    req.status === "OPEN"
-                      ? {
-                          backgroundColor: "#FFF1DC",
-                          borderColor: "#d46b71",
-                        }
-                      : { backgroundColor: "#fff" },
-                  ]}
-                >
-                  <Image source={LogoImg} style={styles.RequestImage} />
-                  <View style={styles.RequestContent}>
-                    <Text style={styles.RequestTitle}>
-                      Pedido do {req.buyer.name}
-                    </Text>
-                    <Text style={styles.RequestAbout}>
-                      R$ {req.total_value.toFixed(2)}
-                    </Text>
-                    <Text style={styles.RequestAbout}>
-                      {req.status === "OPEN"
-                        ? "AGUARDANDO APROVAÇÃO"
-                        : "FINALIZADO"}
-                    </Text>
-                  </View>
-                </Pressable>
+              {orders.map((order) => (
+                <OrderItem
+                  key={order.id}
+                  order={order}
+                  onPress={() => navigate("DetailsOrders", { id: order.id })}
+                />
               ))}
             </View>
           </ScrollView>
@@ -97,59 +78,30 @@ export function Orders() {
         style={styles.button}
         onPress={() => setRefresh(!refresh)}
       >
-        <Text style={styles.labelButton}>Atualizar</Text>
+        <Text style={styles.buttonText}>Atualizar</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    position: "relative",
-  },
-  myRequestContainer: {
-    padding: 40,
-    width: "100%",
+    backgroundColor: "#DFEDE9",
   },
   loading: {
     alignContent: "center",
     marginTop: 50,
   },
-  RequestCard: {
-    padding: 10,
-    // paddingHorizontal: 10,
-    margin: 10,
-    elevation: 5,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "stretch",
-    borderWidth: 1,
-    borderColor: "#019972",
+  content: {
+    flex: 1,
+    paddingHorizontal: 10,
+    position: "relative",
   },
-  RequestImage: {
-    height: 70,
-    width: 70,
-    borderRadius: 10,
-  },
-  RequestContent: {
-    marginLeft: 10,
-  },
-  RequestTitle: {
-    fontWeight: "600",
-    fontSize: 14,
-    color: "#343F4B",
-  },
-  RequestAbout: {
-    fontWeight: "500",
-    fontSize: 14,
-    color: "#343F4B",
-  },
-  labelButton: {
-    fontSize: 18,
+  header: {
     fontWeight: "bold",
-    color: "#fff",
+    fontSize: 18,
+    color: "#343F4B",
   },
   button: {
     width: "100%",
@@ -160,5 +112,10 @@ export const styles = StyleSheet.create({
     elevation: 2,
     bottom: 0,
     position: "absolute",
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
   },
 });

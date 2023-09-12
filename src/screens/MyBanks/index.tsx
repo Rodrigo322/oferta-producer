@@ -1,87 +1,79 @@
+import React, { useEffect, useState } from "react";
 import {
-  ActivityIndicator,
+  View,
+  Text,
+  TouchableOpacity,
   Dimensions,
   Image,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+  ActivityIndicator,
 } from "react-native";
-
-import { HeaderReturn } from "../../components/HeaderReturn";
-const { width } = Dimensions.get("window");
-
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import LogoImg from "../../assets/ofairta.png";
 import { useTabContext } from "../../contexts/TabContext";
 import { api } from "../../services/api";
+import { HeaderReturn } from "../../components/HeaderReturn";
+import LogoImg from "../../assets/ofairta.png";
 
-interface BankingResponse {
-  id: string;
-  name: string;
-}
+const { width } = Dimensions.get("window");
 
-export function MyBanks() {
+const COLORS = {
+  primary: "#019972",
+  background: "#E5E5E5",
+  cardBackground: "#ccc",
+  cardBorder: "#075E55",
+  cardText: "#075E55",
+};
+
+export const MyBanks = () => {
   const [loading, setLoading] = useState(false);
-  const [banking, setBanking] = useState<BankingResponse[]>([]);
+  const [banking, setBanking] = useState([]);
   const { setShowTab, setIdBank } = useTabContext();
-
   const { navigate } = useNavigation();
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    api.get<BankingResponse[]>("/get-all-store-by-owner").then((response) => {
+    api.get("/get-all-store-by-owner").then((response) => {
       setBanking(response.data);
       setLoading(false);
     });
   }, [refresh]);
 
-  async function handlerSelectedBank(id: string) {
+  const handleSelectedBank = (id) => {
     setIdBank(id);
     navigate("Home");
     setShowTab(true);
-  }
+  };
 
   return (
-    <View
-      style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "#E5E5E5",
-      }}
-    >
+    <View style={styles.container}>
       <HeaderReturn title="Minhas Bancas" />
-
-      <View>
-        <TouchableOpacity
-          onPress={() => setRefresh(!refresh)}
-          style={styles.buttonRefresh}
-        >
-          <Text style={styles.buttonText}>Atualizar</Text>
-        </TouchableOpacity>
-      </View>
-
-      {loading && <ActivityIndicator size="large" color="#019972" />}
-      {!loading && (
-        <View style={styles.listHomeProduct}>
-          {banking.map((bank) => (
-            <TouchableOpacity
-              onPress={() => handlerSelectedBank(bank.id)}
-              key={bank.id}
-              style={styles.cardBanking}
-            >
-              <Image style={styles.cardBankingImg} source={LogoImg} />
-              <Text style={styles.cardBankingTitle}>{bank.name}</Text>
-            </TouchableOpacity>
-          ))}
-          {banking.length === 0 && (
+      <TouchableOpacity
+        onPress={() => setRefresh(!refresh)}
+        style={styles.refreshButton}
+      >
+        <Text style={styles.buttonText}>Atualizar</Text>
+      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      ) : (
+        <View style={styles.cardContainer}>
+          {banking.length === 0 ? (
             <Text style={styles.textEmpty}>Nenhuma bancada encontrada</Text>
+          ) : (
+            banking.map((bank) => (
+              <TouchableOpacity
+                onPress={() => handleSelectedBank(bank.id)}
+                key={bank.id}
+                style={styles.cardBanking}
+              >
+                <Image style={styles.cardBankingImg} source={LogoImg} />
+                <Text style={styles.cardBankingTitle}>{bank.name}</Text>
+              </TouchableOpacity>
+            ))
           )}
         </View>
       )}
-
       <TouchableOpacity
         onPress={() => navigate("CreateBanks")}
         style={styles.button}
@@ -90,10 +82,25 @@ export function MyBanks() {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
-export const styles = StyleSheet.create({
-  listHomeProduct: {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  refreshButton: {
+    height: 60,
+    backgroundColor: COLORS.primary,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2,
+  },
+  buttonText: {
+    fontSize: 18,
+    color: "#fff",
+  },
+  cardContainer: {
     marginLeft: 15,
     marginTop: 20,
     marginRight: 15,
@@ -110,11 +117,11 @@ export const styles = StyleSheet.create({
     height: 200,
     alignItems: "center",
     justifyContent: "space-around",
-    backgroundColor: "#ccc",
+    backgroundColor: COLORS.cardBackground,
     width: width / 2 - 20,
     elevation: 5,
     borderWidth: 1,
-    borderColor: "#075E55",
+    borderColor: COLORS.cardBorder,
   },
   cardBankingImg: {
     width: 100,
@@ -124,34 +131,22 @@ export const styles = StyleSheet.create({
   cardBankingTitle: {
     fontWeight: "600",
     fontSize: 14,
-    color: "#075E55",
+    color: COLORS.cardText,
   },
   button: {
     width: "100%",
     height: 60,
-    backgroundColor: "#019972",
+    backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
     elevation: 2,
     bottom: 0,
     position: "absolute",
   },
-  buttonRefresh: {
-    width: "100%",
-    height: 60,
-    backgroundColor: "#019972",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 2,
-  },
-  buttonText: {
-    fontSize: 18,
-    color: "#fff",
-  },
   textEmpty: {
     textAlign: "center",
     fontWeight: "600",
     fontSize: 14,
-    color: "#075E55",
+    color: COLORS.cardText,
   },
 });

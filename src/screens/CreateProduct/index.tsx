@@ -15,6 +15,7 @@ import { useState } from "react";
 import { Plus } from "phosphor-react-native";
 import { useTabContext } from "../../contexts/TabContext";
 import { api } from "../../services/api";
+import { useNavigation } from "@react-navigation/native";
 
 export function CreateProduct() {
   const [name, setName] = useState("");
@@ -24,6 +25,8 @@ export function CreateProduct() {
   const [photos, setPhotos] = useState<string>();
   const { idBank } = useTabContext();
   const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation();
 
   async function handleSelectImages() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -45,26 +48,37 @@ export function CreateProduct() {
   }
 
   async function handleCreateProduct() {
-    setLoading(true);
-    const formData = new FormData();
+    try {
+      setLoading(true);
+      const formData = new FormData();
 
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("quantity", quantity);
-    if (photos) {
-      formData.append("image", {
-        name: `image-${Math.random}.jpeg`,
-        uri: photos,
-        type: "image/jpeg",
-      } as any);
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", price);
+      formData.append("quantity", quantity);
+      if (photos) {
+        formData.append("image", {
+          name: `image-${Math.random}.jpeg`,
+          uri: photos,
+          type: "image/jpeg",
+        } as any);
+      }
+      const response = await api.post(`/create-product/${idBank}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setName("");
+      setDescription("");
+      setPrice("");
+      setQuantity("");
+      Alert.alert("Cadastro", "Produto cadastrado com sucesso! ");
+      navigation.navigate("Home");
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
-    const response = await api.post(`/create-product/${idBank}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    setLoading(false);
   }
 
   return (
@@ -75,6 +89,7 @@ export function CreateProduct() {
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Nome</Text>
             <TextInput
+              value={name}
               onChangeText={setName}
               style={styles.input}
               placeholder="Ex: Batata"
@@ -84,6 +99,7 @@ export function CreateProduct() {
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Descrição</Text>
             <TextInput
+              value={description}
               onChangeText={setDescription}
               style={styles.input}
               placeholder="Ex: Batata Inglesa"
@@ -93,40 +109,47 @@ export function CreateProduct() {
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Preço</Text>
             <TextInput
+              value={price}
               onChangeText={setPrice}
               style={styles.input}
               placeholder="Ex: 8.99"
+              keyboardType="numeric"
             />
           </View>
 
           <View style={styles.inputGroup}>
             <Text style={styles.labelInput}>Quantidade</Text>
             <TextInput
+              value={quantity}
               onChangeText={setQuantity}
               style={styles.input}
               placeholder="Ex: 200"
+              keyboardType="numeric"
             />
           </View>
           <Text style={styles.labelInput}>Imagens do produto</Text>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.uploadedImagesContainer}>
-              <Image
-                key={photos}
-                source={{ uri: photos }}
-                style={styles.uploadedImage}
-              />
-              <TouchableOpacity
-                style={styles.imagesInput}
-                onPress={handleSelectImages}
-              >
-                <Plus color="#075E55" size={32} />
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+          <View style={styles.uploadedImagesContainer}>
+            <Image
+              key={photos}
+              source={{ uri: photos }}
+              style={styles.uploadedImage}
+            />
+            <TouchableOpacity
+              style={styles.imagesInput}
+              onPress={handleSelectImages}
+            >
+              <Plus color="#075E55" size={32} />
+            </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity onPress={handleCreateProduct} style={styles.button}>
-            <Text style={styles.labelButton}>Cadastrar</Text>
+          <TouchableOpacity
+            disabled={loading}
+            onPress={handleCreateProduct}
+            style={styles.button}
+          >
+            {loading && <ActivityIndicator size="large" color="#fff" />}
+            {!loading && <Text style={styles.labelButton}>Cadastrar</Text>}
           </TouchableOpacity>
         </View>
       </ScrollView>
