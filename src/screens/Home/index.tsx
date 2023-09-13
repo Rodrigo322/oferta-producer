@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { Plus } from "phosphor-react-native";
 import { HeaderReturn } from "../../components/HeaderReturn";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -34,7 +35,7 @@ export function Home() {
   const { userName } = useAuth();
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
-  const { idBank } = useTabContext();
+  const { idBank, setIdBank, setShowTab } = useTabContext();
   const { navigate } = useNavigation();
   const [refreshing, setRefreshing] = useState(false); // Alterado o nome para evitar confusão
 
@@ -92,8 +93,62 @@ export function Home() {
           paddingVertical: 20,
           paddingHorizontal: 20,
           flex: 1, // Use flex: 1 para ocupar toda a tela
+          gap: 20,
         }}
       >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: 10,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              setIdBank("");
+              setShowTab(false);
+              navigate("MyBanks");
+            }}
+            style={{
+              flex: 1,
+              padding: 15,
+              backgroundColor: "#075E55",
+              borderRadius: 6,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: "#fff",
+                textTransform: "uppercase",
+              }}
+            >
+              Alterar banca
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              padding: 15,
+              backgroundColor: "#019972",
+              borderRadius: 6,
+              alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 10,
+            }}
+          >
+            <Plus color="#FFF" size={16} weight="regular" />
+            <Text
+              style={{
+                color: "#fff",
+                textTransform: "uppercase",
+              }}
+            >
+              produto
+            </Text>
+          </TouchableOpacity>
+        </View>
         <FlatList
           data={products}
           keyExtractor={(item) => item.id.toString()}
@@ -114,13 +169,6 @@ export function Home() {
           }
         />
       </View>
-
-      {/* <TouchableOpacity
-        onPress={() => setRefreshing(true)} // Ao pressionar o botão, defina refreshing como true
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Atualizar</Text>
-      </TouchableOpacity> */}
     </View>
   );
 }

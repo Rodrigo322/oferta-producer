@@ -43,8 +43,6 @@ export function Settings() {
   return (
     <View style={styles.container}>
       <HeaderReturn title="Configurações" />
-      <Text style={styles.settingUserName}>Olá, {userName}</Text>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ height: "90%", marginBottom: 200 }}

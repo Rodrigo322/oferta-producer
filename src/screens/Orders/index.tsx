@@ -23,68 +23,6 @@ interface RequestResponseProps {
   status: string;
 }
 
-// export function Orders() {
-//   const [orders, setOrders] = useState<RequestResponseProps[]>([]);
-//   const [loading, setLoading] = useState(false);
-//   const { navigate } = useNavigation();
-//   const [refresh, setRefresh] = useState(false);
-
-//   const fetchOrders = async () => {
-//     setLoading(true);
-//     try {
-//       const response = await api.get("/get-all-sale-by-owner");
-//       setOrders(response.data);
-//     } catch (error) {
-//       console.error("Error fetching orders:", error);
-//       Alert.alert("Error", "Failed to fetch orders.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchOrders();
-//   }, [refresh]);
-
-//   orders.sort((a, b) => {
-//     if (a.status === "OPEN" && b.status !== "OPEN") return -1;
-//     if (a.status !== "OPEN" && b.status === "OPEN") return 1;
-//     return 0;
-//   });
-
-//   return (
-//     <View style={styles.container}>
-//       <HeaderReturn title="Meus Pedidos" />
-//       {loading && (
-//         <ActivityIndicator style={styles.loading} size={50} color="#019972" />
-//       )}
-//       <View style={styles.content}>
-//         {!loading && (
-//           <ScrollView showsVerticalScrollIndicator={false}>
-//             <View
-//               style={{ marginBottom: 20, paddingBottom: 90, width: "100%" }}
-//             >
-//               {orders.map((order) => (
-//                 <OrderItem
-//                   key={order.id}
-//                   order={order}
-//                   onPress={() => navigate("DetailsOrders", { id: order.id })}
-//                 />
-//               ))}
-//             </View>
-//           </ScrollView>
-//         )}
-//       </View>
-//       <TouchableOpacity
-//         style={styles.button}
-//         onPress={() => setRefresh(!refresh)}
-//       >
-//         <Text style={styles.buttonText}>Atualizar</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// }
-
 export function Orders() {
   const [orders, setOrders] = useState<RequestResponseProps[]>([]);
   const [loading, setLoading] = useState(false);

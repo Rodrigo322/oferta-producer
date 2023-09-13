@@ -7,12 +7,18 @@ export const ProductItem = ({ product, onDelete, onUpdate }) => {
   const [isModalDeleteProductVisible, setIsModalDeleteProductVisible] =
     useState(false);
 
+  const moeda = product.price;
+  var formatoMoeda = moeda.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
   return (
     <View style={styles.cartProduct}>
       <Image source={{ uri: product.image }} style={styles.cartProductImage} />
       <View style={styles.cartProductTextInfo}>
         <Text style={styles.cartProductText}>{product.name}</Text>
-        <Text style={styles.cartProductText}>R$ {product.price}</Text>
+        <Text style={styles.cartProductText}>{formatoMoeda}</Text>
       </View>
       <View style={styles.cartProductButtons}>
         <Text style={styles.cartProductButtonsText}>
@@ -61,11 +67,13 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#019972",
-    borderRadius: 16,
+    borderRadius: 6,
     marginBottom: 10,
     backgroundColor: "#fff",
     width: "100%",
     elevation: 5,
+    borderLeftColor: "#075E55",
+    borderLeftWidth: 10,
   },
   cartProductImage: {
     width: 50,

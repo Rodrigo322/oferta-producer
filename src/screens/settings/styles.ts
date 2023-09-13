@@ -4,14 +4,9 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: "#DFEDE9",
   },
-  settingUserName: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    paddingHorizontal: 15,
-    fontSize: 18,
-    color: "#019972",
+  settingsContainerOptions: {
+    marginTop: 10,
   },
-  settingsContainerOptions: {},
   settingOptionTitle: {
     fontWeight: "bold",
     paddingHorizontal: 15,
@@ -28,7 +23,7 @@ export const styles = StyleSheet.create({
   settingContainerOptionsGroup: {
     borderColor: "#019972",
     borderWidth: 1,
-    borderRadius: 16,
+    borderRadius: 6,
     elevation: 5,
     flexDirection: "row",
     alignItems: "center",

@@ -4,15 +4,17 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  Image,
   StyleSheet,
   ActivityIndicator,
+  ScrollView,
+  Alert,
+  RefreshControl,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTabContext } from "../../contexts/TabContext";
 import { api } from "../../services/api";
 import { HeaderReturn } from "../../components/HeaderReturn";
-import LogoImg from "../../assets/ofairta.png";
+import { BankList } from "../../components/BankList";
 
 const { width } = Dimensions.get("window");
 
@@ -31,49 +33,59 @@ export const MyBanks = () => {
   const { navigate } = useNavigation();
   const [refresh, setRefresh] = useState(false);
 
-  useEffect(() => {
+  async function fetchStores() {
     setLoading(true);
-    api.get("/get-all-store-by-owner").then((response) => {
-      setBanking(response.data);
+    try {
+      const response = await api.get("/get-all-store-by-owner");
+      if (response.status === 200) {
+        setBanking(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Alerta!", "Houve um erro ao carregar as bancas!");
+    } finally {
       setLoading(false);
-    });
+      setRefresh(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchStores();
   }, [refresh]);
 
-  const handleSelectedBank = (id) => {
-    setIdBank(id);
-    navigate("Home");
-    setShowTab(true);
+  const handleSelectedBank = async (id) => {
+    try {
+      setIdBank(id);
+      await navigate("Home");
+      setShowTab(true);
+    } catch (error) {
+      console.error(error);
+      // Lide com erros de navegação aqui.
+    }
   };
 
   return (
     <View style={styles.container}>
       <HeaderReturn title="Minhas Bancas" />
-      <TouchableOpacity
-        onPress={() => setRefresh(!refresh)}
-        style={styles.refreshButton}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh}
+            onRefresh={fetchStores}
+            colors={["#019972"]}
+          />
+        }
       >
-        <Text style={styles.buttonText}>Atualizar</Text>
-      </TouchableOpacity>
-      {loading ? (
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      ) : (
-        <View style={styles.cardContainer}>
-          {banking.length === 0 ? (
-            <Text style={styles.textEmpty}>Nenhuma bancada encontrada</Text>
-          ) : (
-            banking.map((bank) => (
-              <TouchableOpacity
-                onPress={() => handleSelectedBank(bank.id)}
-                key={bank.id}
-                style={styles.cardBanking}
-              >
-                <Image style={styles.cardBankingImg} source={LogoImg} />
-                <Text style={styles.cardBankingTitle}>{bank.name}</Text>
-              </TouchableOpacity>
-            ))
-          )}
-        </View>
-      )}
+        {loading ? (
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        ) : (
+          <BankList
+            navigate={navigate}
+            banking={banking}
+            handleSelectedBank={handleSelectedBank}
+          />
+        )}
+      </ScrollView>
       <TouchableOpacity
         onPress={() => navigate("CreateBanks")}
         style={styles.button}
@@ -84,7 +96,7 @@ export const MyBanks = () => {
   );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
