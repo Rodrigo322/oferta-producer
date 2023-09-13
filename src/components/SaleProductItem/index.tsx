@@ -13,9 +13,7 @@ interface SaleProductItemProps {
   };
 }
 
-export const SaleProductItem: React.FC<SaleProductItemProps> = ({
-  saleProduct,
-}) => {
+export const SaleProductItem = ({ saleProduct }: SaleProductItemProps) => {
   const total_value = saleProduct.product.price * saleProduct.quantity;
   var formatoMoeda = total_value.toLocaleString("pt-BR", {
     style: "currency",

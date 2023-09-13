@@ -5,6 +5,12 @@ import { SignUp } from "../screens/SignUp";
 
 const { Screen, Navigator } = createStackNavigator();
 
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});
+
 export function AppRoutes() {
   return (
     <Navigator
@@ -13,8 +19,16 @@ export function AppRoutes() {
         headerShown: false,
       }}
     >
-      <Screen name="SignIn" component={SignIn} />
-      <Screen name="SignUp" component={SignUp} />
+      <Screen
+        options={{ cardStyleInterpolator: forFade }}
+        name="SignIn"
+        component={SignIn}
+      />
+      <Screen
+        options={{ cardStyleInterpolator: forFade }}
+        name="SignUp"
+        component={SignUp}
+      />
     </Navigator>
   );
 }

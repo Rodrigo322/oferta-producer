@@ -88,7 +88,6 @@ export function Settings() {
             onPress={() => {
               setIdBank("");
               setShowTab(false);
-              navigate("MyBanks");
             }}
             icon={<Database />}
             textColor="#fff"
@@ -280,7 +279,7 @@ export function Settings() {
               width: "40%",
               height: 45,
               backgroundColor: "#d46b71",
-              borderRadius: 16,
+              borderRadius: 6,
               elevation: 5,
               alignItems: "center",
               justifyContent: "center",
@@ -296,7 +295,7 @@ export function Settings() {
               backgroundColor: "#019972",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: 16,
+              borderRadius: 6,
               elevation: 5,
             }}
           >

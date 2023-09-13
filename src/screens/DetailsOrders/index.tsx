@@ -47,6 +47,7 @@ export function DetailsOrders() {
   useEffect(() => {
     async function fetchDetailsSale() {
       try {
+        setLoading(true);
         const response = await api.get(`get-details-sale-by-user/${id}`);
         setDetailsSale(response.data);
       } catch (error) {
@@ -72,9 +73,12 @@ export function DetailsOrders() {
       setLoading(false);
     }
   }
+  let total_value = 0;
+  if (detailsSale?.total_value != null) {
+    total_value = detailsSale.total_value;
+  }
 
-  const total_value = detailsSale.total_value;
-  var formatoMoeda = total_value.toLocaleString("pt-BR", {
+  var formatoMoeda = total_value?.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });

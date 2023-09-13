@@ -1,5 +1,6 @@
 import { Plus } from "phosphor-react-native";
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   RefreshControl,
@@ -102,7 +103,6 @@ export function Home() {
             onPress={() => {
               setIdBank("");
               setShowTab(false);
-              navigate("MyBanks");
             }}
             style={{
               flex: 1,
@@ -145,25 +145,28 @@ export function Home() {
             </Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          data={products}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <ProductItem
-              product={item}
-              onDelete={handleDeleteProduct}
-              onUpdate={handleUpdateProduct}
-            />
-          )}
-          ListEmptyComponent={() => <Text>Esta banca está sem produtos</Text>}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={fetchProducts} // A função de atualização
-              colors={["#019972"]} // Cor do indicador de carregamento
-            />
-          }
-        />
+        {loading && <ActivityIndicator color="#019972" size="large" />}
+        {!loading && (
+          <FlatList
+            data={products}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <ProductItem
+                product={item}
+                onDelete={handleDeleteProduct}
+                onUpdate={handleUpdateProduct}
+              />
+            )}
+            ListEmptyComponent={() => <Text>Esta banca está sem produtos</Text>}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={fetchProducts} // A função de atualização
+                colors={["#019972"]} // Cor do indicador de carregamento
+              />
+            }
+          />
+        )}
       </View>
     </View>
   );

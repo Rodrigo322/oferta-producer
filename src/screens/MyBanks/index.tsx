@@ -53,14 +53,12 @@ export const MyBanks = () => {
     fetchStores();
   }, [refresh]);
 
-  const handleSelectedBank = async (id) => {
+  const handleSelectedBank = async (id: string) => {
     try {
       setIdBank(id);
-      await navigate("Home");
       setShowTab(true);
     } catch (error) {
       console.error(error);
-      // Lide com erros de navegação aqui.
     }
   };
 
@@ -79,11 +77,7 @@ export const MyBanks = () => {
         {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} />
         ) : (
-          <BankList
-            navigate={navigate}
-            banking={banking}
-            handleSelectedBank={handleSelectedBank}
-          />
+          <BankList banking={banking} handleSelectedBank={handleSelectedBank} />
         )}
       </ScrollView>
       <TouchableOpacity

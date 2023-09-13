@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#005047",
     marginBottom: 15,
-    borderRadius: 7,
+    borderRadius: 6,
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#019972",
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
   buttonSignIn: {
     height: 60,
     backgroundColor: "#019972",
-    borderRadius: 7,
+    borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
     elevation: 2,

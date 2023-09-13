@@ -48,7 +48,7 @@ export function TabRoutes() {
     >
       {showTab && (
         <>
-        <Screen
+          <Screen
             name="Dashboard"
             component={Dashboard}
             options={{
@@ -57,7 +57,7 @@ export function TabRoutes() {
               ),
             }}
           />
-          
+
           <Screen
             name="Home"
             component={Home}
@@ -68,8 +68,6 @@ export function TabRoutes() {
             }}
           />
 
-          
-
           <Screen
             name="Orders"
             component={Orders}
@@ -77,61 +75,6 @@ export function TabRoutes() {
               tabBarIcon: ({ color }) => (
                 <Storefront color={color} size={30} weight="fill" />
               ),
-            }}
-          />
-
-          <Screen
-            name="DetailsOrders"
-            component={DetailsOrders}
-            options={{
-              tabBarButton: () => null,
-            }}
-          />
-
-          <Screen
-            name="AddressProfile"
-            component={AddressProfile}
-            options={{
-              tabBarButton: () => null,
-            }}
-          />
-
-          <Screen
-            name="Profile"
-            component={Profile}
-            options={{
-              tabBarButton: () => null,
-            }}
-          />
-
-          <Screen
-            name="ResetPassword"
-            component={ResetPassword}
-            options={{
-              tabBarButton: () => null,
-            }}
-          />
-
-          <Screen
-            name="DeactivateAccount"
-            component={DeactivateAccount}
-            options={{
-              tabBarButton: () => null,
-            }}
-          />
-
-          <Screen
-            name="CreateProduct"
-            component={CreateProduct}
-            options={{
-              tabBarButton: () => null,
-            }}
-          />
-          <Screen
-            name="UpdateProduct"
-            component={UpdateProduct}
-            options={{
-              tabBarButton: () => null,
             }}
           />
         </>
@@ -168,6 +111,61 @@ export function TabRoutes() {
       <Screen
         name="MyHistory"
         component={MyHistory}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+
+      <Screen
+        name="DetailsOrders"
+        component={DetailsOrders}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+
+      <Screen
+        name="AddressProfile"
+        component={AddressProfile}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+
+      <Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+
+      <Screen
+        name="ResetPassword"
+        component={ResetPassword}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+
+      <Screen
+        name="DeactivateAccount"
+        component={DeactivateAccount}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+
+      <Screen
+        name="CreateProduct"
+        component={CreateProduct}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <Screen
+        name="UpdateProduct"
+        component={UpdateProduct}
         options={{
           tabBarButton: () => null,
         }}
