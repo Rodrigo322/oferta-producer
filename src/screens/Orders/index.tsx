@@ -8,6 +8,7 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { HeaderReturn } from "../../components/HeaderReturn";
 import React, { useEffect, useState } from "react";
@@ -22,11 +23,73 @@ interface RequestResponseProps {
   status: string;
 }
 
+// export function Orders() {
+//   const [orders, setOrders] = useState<RequestResponseProps[]>([]);
+//   const [loading, setLoading] = useState(false);
+//   const { navigate } = useNavigation();
+//   const [refresh, setRefresh] = useState(false);
+
+//   const fetchOrders = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await api.get("/get-all-sale-by-owner");
+//       setOrders(response.data);
+//     } catch (error) {
+//       console.error("Error fetching orders:", error);
+//       Alert.alert("Error", "Failed to fetch orders.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchOrders();
+//   }, [refresh]);
+
+//   orders.sort((a, b) => {
+//     if (a.status === "OPEN" && b.status !== "OPEN") return -1;
+//     if (a.status !== "OPEN" && b.status === "OPEN") return 1;
+//     return 0;
+//   });
+
+//   return (
+//     <View style={styles.container}>
+//       <HeaderReturn title="Meus Pedidos" />
+//       {loading && (
+//         <ActivityIndicator style={styles.loading} size={50} color="#019972" />
+//       )}
+//       <View style={styles.content}>
+//         {!loading && (
+//           <ScrollView showsVerticalScrollIndicator={false}>
+//             <View
+//               style={{ marginBottom: 20, paddingBottom: 90, width: "100%" }}
+//             >
+//               {orders.map((order) => (
+//                 <OrderItem
+//                   key={order.id}
+//                   order={order}
+//                   onPress={() => navigate("DetailsOrders", { id: order.id })}
+//                 />
+//               ))}
+//             </View>
+//           </ScrollView>
+//         )}
+//       </View>
+//       <TouchableOpacity
+//         style={styles.button}
+//         onPress={() => setRefresh(!refresh)}
+//       >
+//         <Text style={styles.buttonText}>Atualizar</Text>
+//       </TouchableOpacity>
+//     </View>
+//   );
+// }
+
 export function Orders() {
   const [orders, setOrders] = useState<RequestResponseProps[]>([]);
   const [loading, setLoading] = useState(false);
   const { navigate } = useNavigation();
-  const [refresh, setRefresh] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // Alterado o nome para evitar confusão
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -38,12 +101,13 @@ export function Orders() {
       Alert.alert("Error", "Failed to fetch orders.");
     } finally {
       setLoading(false);
+      setRefreshing(false); // Ao concluir o carregamento, defina refreshing como false
     }
   };
 
   useEffect(() => {
     fetchOrders();
-  }, [refresh]);
+  }, [refreshing]);
 
   orders.sort((a, b) => {
     if (a.status === "OPEN" && b.status !== "OPEN") return -1;
@@ -59,7 +123,17 @@ export function Orders() {
       )}
       <View style={styles.content}>
         {!loading && (
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              // Adicione o componente RefreshControl
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={fetchOrders} // A função de atualização
+                colors={["#019972"]} // Cor do indicador de carregamento
+              />
+            }
+          >
             <View
               style={{ marginBottom: 20, paddingBottom: 90, width: "100%" }}
             >
@@ -74,12 +148,12 @@ export function Orders() {
           </ScrollView>
         )}
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.button}
-        onPress={() => setRefresh(!refresh)}
+        onPress={() => setRefreshing(true)} // Ao pressionar o botão, defina refreshing como true
       >
         <Text style={styles.buttonText}>Atualizar</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }
