@@ -1,25 +1,26 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
-  BagSimple,
   Bank,
+  HardDrives,
   House,
   Storefront,
   UserGear,
 } from "phosphor-react-native";
 import { useTabContext } from "../contexts/TabContext";
+import { AddressProfile } from "../screens/AddressProfile";
+import { CreateBanks } from "../screens/CreateBanks";
+import { CreateProduct } from "../screens/CreateProduct";
+import { Dashboard } from "../screens/DashBoard";
+import { DeactivateAccount } from "../screens/DeactivateAccount";
+import { DetailsOrders } from "../screens/DetailsOrders";
 import { Home } from "../screens/Home";
 import { MyBanks } from "../screens/MyBanks";
-import { Settings } from "../screens/settings";
-import { CreateProduct } from "../screens/CreateProduct";
+import { MyHistory } from "../screens/MyHistory";
 import { Orders } from "../screens/Orders";
-import { DetailsOrders } from "../screens/DetailsOrders";
-import { AddressProfile } from "../screens/AddressProfile";
 import { Profile } from "../screens/Profile";
 import { ResetPassword } from "../screens/ResetPassword";
-import { DeactivateAccount } from "../screens/DeactivateAccount";
-import { CreateBanks } from "../screens/CreateBanks";
 import { UpdateProduct } from "../screens/UpdateProduct";
-import { MyHistory } from "../screens/MyHistory";
+import { Settings } from "../screens/settings";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -47,15 +48,27 @@ export function TabRoutes() {
     >
       {showTab && (
         <>
-          <Screen
-            name="Home"
-            component={Home}
+        <Screen
+            name="Dashboard"
+            component={Dashboard}
             options={{
               tabBarIcon: ({ color }) => (
                 <House color={color} size={30} weight="fill" />
               ),
             }}
           />
+          
+          <Screen
+            name="Home"
+            component={Home}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <HardDrives color={color} size={30} weight="fill" />
+              ),
+            }}
+          />
+
+          
 
           <Screen
             name="Orders"

@@ -1,26 +1,21 @@
-import { PencilLine, XCircle } from "phosphor-react-native";
+import { Plus } from "phosphor-react-native";
 import {
-  ActivityIndicator,
   Alert,
   FlatList,
-  Image,
   RefreshControl,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { Plus } from "phosphor-react-native";
 import { HeaderReturn } from "../../components/HeaderReturn";
 
-import { useAuth } from "../../contexts/AuthContext";
-import React, { useEffect, useState } from "react";
-import { api } from "../../services/api";
-import { useTabContext } from "../../contexts/TabContext";
 import { useNavigation } from "@react-navigation/native";
-import { ModalApp } from "../../components/Modal";
+import React, { useEffect, useState } from "react";
 import { ProductItem } from "../../components/ProductItem";
+import { useAuth } from "../../contexts/AuthContext";
+import { useTabContext } from "../../contexts/TabContext";
+import { api } from "../../services/api";
 
 interface ProductsResponse {
   id: string;
@@ -127,6 +122,7 @@ export function Home() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => navigate("CreateProduct")}
             style={{
               flex: 1,
               padding: 15,

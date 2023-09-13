@@ -15,6 +15,7 @@ export declare global {
       CreateBanks: undefined;
       MyHistory: undefined;
       MyBanks: undefined;
+      Dashboard: undefined;
       UpdateProduct: {
         id: string;
         name: string;
