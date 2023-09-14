@@ -84,7 +84,7 @@ export const MyBanks = () => {
         onPress={() => navigate("CreateBanks")}
         style={styles.button}
       >
-        <Text style={styles.buttonText}>Criar nova banca</Text>
+        <Text style={styles.buttonText}>+</Text>
       </TouchableOpacity>
     </View>
   );
@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonText: {
-    fontSize: 18,
+    fontSize: 30,
     color: "#fff",
   },
   cardContainer: {
@@ -140,13 +140,16 @@ export const styles = StyleSheet.create({
     color: COLORS.cardText,
   },
   button: {
-    width: "100%",
+    width: 60,
     height: 60,
+    borderRadius: 60,
     backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 2,
-    bottom: 0,
+    elevation: 4,
+    // left: 40,
+    right: 20,
+    bottom: 20,
     position: "absolute",
   },
   textEmpty: {
