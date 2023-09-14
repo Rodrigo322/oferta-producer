@@ -59,14 +59,6 @@ export const Dashboard: React.FC = () => {
             decimalPlaces: 2, // optional, defaults to 2dp
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 6,
-            },
-            propsForDots: {
-              r: "5",
-              strokeWidth: "2",
-              stroke: "#ffa726",
-            },
           }}
           style={{
             marginVertical: 8,
@@ -92,15 +84,23 @@ export const Dashboard: React.FC = () => {
         </Text>
         <BarChart
           data={{
-            labels: ["January", "February", "March", "April", "May"],
+            labels: [
+              "Segunda",
+              "Terça",
+              "Quarta",
+              "Quinta",
+              "Sexta",
+              "Sabado",
+              "Domingo",
+            ],
             datasets: [
               {
-                data: [2.0, 4.5, 2.8, 8.0, 9.9],
+                data: [2.0, 4.5, 2.8, 8.0, 9.9, 1.0, 1.1],
               },
             ],
           }}
           width={Dimensions.get("window").width - 20} // from react-native
-          height={220}
+          height={250}
           yAxisLabel="R$"
           yAxisSuffix="k"
           yAxisInterval={1} // optional, defaults to 1
@@ -111,18 +111,10 @@ export const Dashboard: React.FC = () => {
             decimalPlaces: 2, // optional, defaults to 2dp
             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-            style: {
-              borderRadius: 6,
-            },
-            propsForDots: {
-              r: "5",
-              strokeWidth: "2",
-              stroke: "#ffa726",
-            },
           }}
           style={{
-            marginVertical: 8,
             borderRadius: 6,
+            marginVertical: 8,
           }}
         />
       </View>

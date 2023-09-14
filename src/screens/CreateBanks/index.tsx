@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,17 +10,21 @@ import {
 import { HeaderReturn } from "../../components/HeaderReturn";
 import { useState } from "react";
 import { api } from "../../services/api";
+import { useNavigation } from "@react-navigation/native";
 
 export function CreateBanks() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const navigation = useNavigation();
+
   async function handleCreateBanks() {
     setLoading(true);
     const response = await api.post("/create-store", { name, description });
     console.log(response.data);
     setLoading(false);
+    navigation.navigate("MyBanks");
   }
   return (
     <View
@@ -54,7 +59,7 @@ export function CreateBanks() {
           onPress={handleCreateBanks}
           style={styles.button}
         >
-          {loading && <Text style={styles.labelButton}>Carregando...</Text>}
+          {loading && <ActivityIndicator size="small" color="#FFF" />}
           {!loading && <Text style={styles.labelButton}>Cadastrar</Text>}
         </TouchableOpacity>
       </View>
