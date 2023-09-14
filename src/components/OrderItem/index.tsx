@@ -1,4 +1,11 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import LogoImg from "../../assets/ofairta.png";
 
 export const OrderItem = ({ order, onPress }) => {
@@ -7,6 +14,29 @@ export const OrderItem = ({ order, onPress }) => {
     style: "currency",
     currency: "BRL",
   });
+
+  const dataString = order.createdAt;
+  const data = new Date(dataString);
+
+  const nomesDosMeses = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
+  ];
+
+  const dia = data.getDate();
+  const mes = nomesDosMeses[data.getMonth()]; // Adicionar 1 porque o mês é base 0
+  const ano = data.getFullYear();
+  const dataFormatada = `${dia} de ${mes} de ${ano}`;
 
   return (
     <Pressable
@@ -27,13 +57,48 @@ export const OrderItem = ({ order, onPress }) => {
             },
       ]}
     >
-      <Image source={LogoImg} style={styles.requestImage} />
-      <View style={styles.requestContent}>
-        <Text style={styles.requestTitle}>Pedido do {order.buyer.name}</Text>
-        <Text style={styles.requestAbout}>{formatoMoeda}</Text>
-        <Text style={styles.requestAbout}>
-          {order.status === "OPEN" ? "AGUARDANDO APROVAÇÃO" : "FINALIZADO"}
+      <View
+        style={{
+          height: 20,
+          width: "100%",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          borderBottomWidth: 1,
+          marginVertical: 10,
+          paddingHorizontal: 15,
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: "900",
+            fontSize: 13,
+            color: "#343F4B",
+          }}
+        >
+          Pedido em:
         </Text>
+        <Text
+          style={{
+            fontWeight: "900",
+            fontSize: 13,
+            color: "#343F4B",
+          }}
+        >
+          {dataFormatada}
+        </Text>
+      </View>
+      <View style={styles.requestContent}>
+        <Image style={styles.requestImage} source={LogoImg} />
+        <View
+          style={{
+            paddingLeft: 10,
+          }}
+        >
+          <Text style={styles.requestTitle}>Pedido do {order.buyer.name}</Text>
+          <Text style={styles.requestAbout}>
+            {order.status === "OPEN" ? "AGUARDANDO APROVAÇÃO" : "FINALIZADO"}
+          </Text>
+        </View>
       </View>
     </Pressable>
   );
@@ -50,11 +115,11 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   requestCard: {
-    padding: 10,
+    // padding: 10,
     margin: 10,
     elevation: 5,
     borderRadius: 6,
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "stretch",
     borderWidth: 1,
     borderColor: "#019972",
@@ -62,10 +127,12 @@ const styles = StyleSheet.create({
   requestImage: {
     height: 70,
     width: 70,
-    borderRadius: 10,
+    borderRadius: 6,
   },
   requestContent: {
-    marginLeft: 10,
+    margin: 10,
+    // marginTop: ,
+    flexDirection: "row",
   },
   requestTitle: {
     fontWeight: "600",
