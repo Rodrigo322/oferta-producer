@@ -34,7 +34,7 @@ export const OrderItem = ({ order, onPress }) => {
   ];
 
   const dia = data.getDate();
-  const mes = nomesDosMeses[data.getMonth()]; // Adicionar 1 porque o mês é base 0
+  const mes = nomesDosMeses[data.getMonth()];
   const ano = data.getFullYear();
   const dataFormatada = `${dia} de ${mes} de ${ano}`;
 
@@ -59,12 +59,11 @@ export const OrderItem = ({ order, onPress }) => {
     >
       <View
         style={{
-          height: 20,
-          width: "100%",
+          height: 30,
           flexDirection: "row",
+          alignItems: "center",
           justifyContent: "space-between",
-          borderBottomWidth: 1,
-          marginVertical: 10,
+          borderBottomWidth: 0.5,
           paddingHorizontal: 15,
         }}
       >

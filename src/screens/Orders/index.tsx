@@ -35,7 +35,6 @@ export function Orders() {
     try {
       const response = await api.get("/get-all-sale-by-owner");
       setOrders(response.data);
-      console.log(JSON.stringify(response.data, null, 2));
     } catch (error) {
       console.error("Error fetching orders:", error);
       Alert.alert("Error", "Failed to fetch orders.");

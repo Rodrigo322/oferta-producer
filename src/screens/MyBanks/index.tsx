@@ -15,6 +15,7 @@ import { useTabContext } from "../../contexts/TabContext";
 import { api } from "../../services/api";
 import { HeaderReturn } from "../../components/HeaderReturn";
 import { BankList } from "../../components/BankList";
+import { Plus } from "phosphor-react-native";
 
 const { width } = Dimensions.get("window");
 
@@ -84,7 +85,7 @@ export const MyBanks = () => {
         onPress={() => navigate("CreateBanks")}
         style={styles.button}
       >
-        <Text style={styles.buttonText}>+</Text>
+        <Plus color="#FFF" weight="bold" />
       </TouchableOpacity>
     </View>
   );
