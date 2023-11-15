@@ -63,6 +63,18 @@ export const MyBanks = () => {
     }
   };
 
+  const handleDeleteBank = async (id: string) => {
+    try {
+      const response = await api.delete(`/delete-store/${id}`);
+      if (response.status === 200) {
+        Alert.alert("Banca excluída com sucesso!");
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      Alert.alert("Error", "Failed to delete the product.");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <HeaderReturn title="Minhas Bancas" />
@@ -78,7 +90,11 @@ export const MyBanks = () => {
         {loading ? (
           <ActivityIndicator size="large" color={COLORS.primary} />
         ) : (
-          <BankList banking={banking} handleSelectedBank={handleSelectedBank} />
+          <BankList
+            onDelete={handleDeleteBank}
+            banking={banking}
+            handleSelectedBank={handleSelectedBank}
+          />
         )}
       </ScrollView>
       <TouchableOpacity
@@ -153,10 +169,44 @@ export const styles = StyleSheet.create({
     bottom: 20,
     position: "absolute",
   },
+  buttonRemove: {
+    borderRadius: 5,
+    height: 25,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonRemoveText: {
+    color: "#FFF",
+  },
+
+  footerButton: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
   textEmpty: {
     textAlign: "center",
     fontWeight: "600",
     fontSize: 14,
     color: COLORS.cardText,
+  },
+  modalContent: {
+    height: 200,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 25,
+  },
+  modalButton: {
+    width: "40%",
+    height: 45,
+    backgroundColor: "#d46b71",
+    borderRadius: 6,
+    elevation: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  modalButtonText: {
+    color: "#FFF",
   },
 });
