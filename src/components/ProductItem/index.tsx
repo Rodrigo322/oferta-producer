@@ -1,6 +1,6 @@
 import { PencilLine, XCircle } from "phosphor-react-native";
 import { useState } from "react";
-import { View, TouchableOpacity, Image, Text, StyleSheet } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ModalApp } from "../Modal";
 
 export const ProductItem = ({ product, onDelete, onUpdate }) => {

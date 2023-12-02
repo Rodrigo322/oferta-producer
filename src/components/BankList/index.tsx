@@ -1,16 +1,22 @@
-import { View, TouchableOpacity, Image, Text } from "react-native";
-import { styles } from "../../screens/MyBanks";
-import LogoImg from "../../assets/ofairta.png";
 import { PencilSimpleLine, Trash } from "phosphor-react-native";
 import React, { useState } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+
+import LogoImg from "../../assets/ofairta.png";
+import { styles } from "../../screens/MyBanks";
 import { ModalApp } from "../Modal";
+
+interface BankTypes {
+  id: string;
+  name: string;
+}
 
 export const BankList = ({ banking, handleSelectedBank, onDelete }) => {
   const [isModalDeleteProductVisible, setIsModalDeleteProductVisible] =
     useState(false);
   return (
     <View style={styles.cardContainer}>
-      {banking.map((bank) => (
+      {banking.map((bank: BankTypes) => (
         <>
           <TouchableOpacity
             onPress={() => {
@@ -36,10 +42,9 @@ export const BankList = ({ banking, handleSelectedBank, onDelete }) => {
             </View>
           </TouchableOpacity>
           <ModalApp
-            key={bank.id}
             isVisible={isModalDeleteProductVisible}
             onClose={() => setIsModalDeleteProductVisible(false)}
-            title="Deseja realmente excluir o produto?"
+            title="Deseja realmente excluir a banca?"
             backgroundColor="#DFEDE9"
           >
             <View style={styles.modalContent}>

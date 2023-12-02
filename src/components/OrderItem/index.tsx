@@ -1,11 +1,4 @@
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import LogoImg from "../../assets/ofairta.png";
 
 export const OrderItem = ({ order, onPress }) => {
